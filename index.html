@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beachdog Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --sand: #F5EFE0; --deep: #0E1A14; --bark: #2A3B2E;
+    --tide: #4A8C6F; --sun: #E8B84B; --foam: #D4EDE1; --rust: #C45C2A;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(--deep); overflow-x: hidden; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4rem; background: rgba(245,239,224,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(42,59,46,0.1); }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em; color: var(--deep); text-decoration: none; }
+  .nav-logo span { color: var(--tide); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--bark); text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--tide); }
+  .nav-cta { background: var(--deep); color: var(--sand) !important; padding: 0.55rem 1.3rem; border-radius: 2px; }
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 8rem 4rem 4rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(74,140,111,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 20% 80%, rgba(232,184,75,0.07) 0%, transparent 60%); }
+  .hero-grid-lines { position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(rgba(42,59,46,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(42,59,46,0.04) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tide); margin-bottom: 2rem; }
+  .hero-tag::before { content: ''; width: 24px; height: 2px; background: var(--tide); }
+  h1 { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 5.5vw, 5.5rem); font-weight: 800; line-height: 1.0; letter-spacing: -0.03em; color: var(--deep); margin-bottom: 1.8rem; }
+  h1 .accent { color: var(--tide); }
+  h1 .underline-sun { position: relative; display: inline-block; }
+  h1 .underline-sun::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 4px; background: var(--sun); border-radius: 2px; }
+  .hero-sub { font-size: 1.1rem; font-weight: 300; line-height: 1.7; color: var(--bark); max-width: 480px; margin-bottom: 2.5rem; }
+  .hero-sub strong { font-weight: 500; color: var(--deep); }
+  .hero-actions { display: flex; gap: 1rem; align-items: center; }
+  .btn-primary { background: var(--deep); color: var(--sand); padding: 0.9rem 2rem; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.02em; border: none; border-radius: 2px; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; display: inline-block; }
+  .btn-primary:hover { background: var(--tide); transform: translateY(-1px); }
+  .btn-ghost { color: var(--bark); font-size: 0.9rem; font-weight: 400; text-decoration: none; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
+  .btn-ghost:hover { color: var(--tide); }
+  .btn-ghost::after { content: '→'; }
+  .hero-visual { position: relative; z-index: 1; display: flex; justify-content: center; align-items: center; }
+  .hero-card-stack { position: relative; width: 340px; height: 380px; }
+  .hcard { position: absolute; background: white; border-radius: 4px; padding: 1.5rem; box-shadow: 0 8px 40px rgba(14,26,20,0.1); width: 280px; }
+  .hcard-1 { top: 0; left: 40px; transform: rotate(-3deg); background: var(--deep); color: var(--sand); }
+  .hcard-2 { top: 60px; left: 0; transform: rotate(1.5deg); background: white; }
+  .hcard-3 { top: 120px; left: 50px; transform: rotate(-1deg); background: var(--foam); }
+  .hcard-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; margin-bottom: 0.5rem; }
+  .hcard-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.8rem; }
+  .hcard-1 .hcard-label { color: var(--foam); }
+  .hcard-1 .hcard-title { color: var(--sun); }
+  .hcard-bar { height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin-bottom: 0.3rem; overflow: hidden; }
+  .hcard-bar-fill { height: 100%; border-radius: 2px; background: var(--sun); }
+  .hcard-stat { font-size: 1.8rem; font-weight: 800; font-family: 'Syne', sans-serif; color: var(--tide); }
+  .hcard-stat-label { font-size: 0.75rem; color: var(--bark); }
+  .hcard-tag { display: inline-block; padding: 0.2rem 0.6rem; background: var(--tide); color: white; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2px; margin-bottom: 0.5rem; }
+  .stats-strip { background: var(--deep); padding: 2.5rem 4rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--sun); line-height: 1; }
+  .stat-desc { font-size: 0.85rem; color: rgba(245,239,224,0.6); margin-top: 0.3rem; }
+  section { padding: 6rem 4rem; }
+  .section-tag { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tide); font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section-tag::before { content: ''; width: 20px; height: 2px; background: var(--tide); }
+  h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -0.03em; line-height: 1.1; color: var(--deep); margin-bottom: 1.2rem; }
+  .how { background: white; }
+  .how-inner, .work-inner { max-width: 1100px; margin: 0 auto; }
+  .how-header, .work-header { max-width: 560px; margin-bottom: 4rem; }
+  .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+  .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .step { position: relative; }
+  .step-num { font-family: 'Syne', sans-serif; font-size: 4rem; font-weight: 800; color: rgba(74,140,111,0.12); line-height: 1; margin-bottom: 1rem; }
+  .step-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.6rem; }
+  .step-desc { font-size: 0.9rem; color: var(--bark); line-height: 1.7; font-weight: 300; }
+  .step-connector { position: absolute; top: 2rem; right: -1.5rem; font-size: 1.5rem; color: var(--tide); opacity: 0.3; }
+  .work { background: var(--sand); }
+  .work-card { border: 1px solid rgba(42,59,46,0.12); border-radius: 4px; padding: 2rem; background: white; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+  .work-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(14,26,20,0.1); }
+  .work-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .work-card.c1::before { background: var(--tide); }
+  .work-card.c2::before { background: var(--sun); }
+  .work-card.c3::before { background: var(--rust); }
+  .work-client { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tide); font-weight: 500; margin-bottom: 0.8rem; }
+  .work-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.15rem; margin-bottom: 0.7rem; }
+  .work-desc { font-size: 0.875rem; color: var(--bark); line-height: 1.7; font-weight: 300; margin-bottom: 1.2rem; }
+  .work-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag { font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 2px; background: var(--foam); color: var(--bark); }
+  .why { background: var(--bark); }
+  .why-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .why h2 { color: var(--sand); }
+  .why .section-tag { color: var(--sun); }
+  .why .section-tag::before { background: var(--sun); }
+  .why-sub { color: rgba(245,239,224,0.65); font-size: 1rem; line-height: 1.8; font-weight: 300; }
+  .why-points { display: flex; flex-direction: column; gap: 1.5rem; }
+  .why-point { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .why-icon { width: 40px; height: 40px; border-radius: 2px; background: rgba(74,140,111,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .why-point-text h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--sand); margin-bottom: 0.3rem; }
+  .why-point-text p { font-size: 0.85rem; color: rgba(245,239,224,0.55); line-height: 1.6; font-weight: 300; }
+  .cta-section { background: var(--tide); padding: 6rem 4rem; text-align: center; }
+  .cta-section h2 { color: white; margin-bottom: 1rem; }
+  .cta-section p { color: rgba(255,255,255,0.75); font-size: 1rem; max-width: 480px; margin: 0 auto 2.5rem; font-weight: 300; line-height: 1.7; }
+  .btn-white { background: white; color: var(--tide); padding: 1rem 2.5rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 2px; cursor: pointer; text-decoration: none; display: inline-block; transition: transform 0.15s, box-shadow 0.2s; font-family: 'Syne', sans-serif; }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+  .cta-email { display: block; margin-top: 1.2rem; color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+  footer { background: var(--deep); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--sand); font-size: 1rem; }
+  .footer-logo span { color: var(--tide); }
+  .footer-copy { font-size: 0.78rem; color: rgba(245,239,224,0.35); }
+  .footer-email { font-size: 0.85rem; color: var(--tide); text-decoration: none; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-tag { animation: fadeUp 0.6s ease both; }
+  h1 { animation: fadeUp 0.6s 0.15s ease both; }
+  .hero-sub { animation: fadeUp 0.6s 0.25s ease both; }
+  .hero-actions { animation: fadeUp 0.6s 0.35s ease both; }
+  .hero-visual { animation: fadeUp 0.8s 0.4s ease both; }
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+    .hero-visual { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .stats-strip { padding: 2rem 1.5rem; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+    .how-steps, .work-grid { grid-template-columns: 1fr; }
+    .why-inner { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">Beachdog<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#how">Process</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Custom Apps for Real Businesses</div>
+    <h1>Your ops,<br><span class="accent">automated.</span><br><span class="underline-sun">Done fast.</span></h1>
+    <p class="hero-sub">We build custom apps for SMEs that are <strong>drowning in manual work</strong>. Delivered in days, not months. At a third of the cost. So you can get back to spending time like a beachdog.</p>
+    <div class="hero-actions">
+      <a href="mailto:info@beachdogsolutions.com" class="btn-primary">Start the Conversation</a>
+      <a href="#work" class="btn-ghost">See our work</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-stack">
+      <div class="hcard hcard-1">
+        <div class="hcard-label">Repair Tracker — Swiss Brand</div>
+        <div class="hcard-title">Jobs In Progress</div>
+        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:78%"></div></div>
+        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:45%;background:rgba(255,255,255,0.3)"></div></div>
+        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="hcard hcard-2">
+        <div class="hcard-label">POS System — Bali Resto</div>
+        <div class="hcard-title">Today's Revenue</div>
+        <div class="hcard-stat">Rp 4.2M</div>
+        <div class="hcard-stat-label">↑ 23% vs last week</div>
+      </div>
+      <div class="hcard hcard-3">
+        <div class="hcard-tag">Live App</div>
+        <div class="hcard-title">Recipe Manager</div>
+        <div style="font-size:0.8rem;color:var(--bark);font-weight:300">12 recipes · 4 categories · Cost tracked</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-num">3×</div><div class="stat-desc">Cheaper than traditional dev</div></div>
+  <div class="stat-item"><div class="stat-num">Weeks</div><div class="stat-desc">Not 3–6 months</div></div>
+  <div class="stat-item"><div class="stat-num">0 BS</div><div class="stat-desc">We solve real workflow problems</div></div>
+</div>
+
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="how-header">
+      <div class="section-tag">How it works</div>
+      <h2>Simple process.<br>Real results.</h2>
+      <p style="color:var(--bark);font-size:0.95rem;font-weight:300;line-height:1.8">No lengthy discovery phases. No confusing specs. We talk, we understand your operation, we build.</p>
+    </div>
+    <div class="how-steps">
+      <div class="step"><div class="step-num">01</div><div class="step-title">Tell us your pain</div><div class="step-desc">One call or email. You describe what's slowing you down — spreadsheets, manual tracking, lost data. We listen and ask the right questions.</div><div class="step-connector">→</div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-title">We scope and quote</div><div class="step-desc">Within 48 hours you get a clear breakdown — what we'll build, how long it takes, what it costs. No surprises.</div><div class="step-connector">→</div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-title">We ship it</div><div class="step-desc">You get a working app fast. We iterate with you until it fits your workflow perfectly. Then you get your time back.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="work" id="work">
+  <div class="work-inner">
+    <div class="work-header">
+      <div class="section-tag">Our work</div>
+      <h2>Built for businesses<br>that actually work hard.</h2>
+    </div>
+    <div class="work-grid">
+      <div class="work-card c1"><div class="work-client">Local Restaurant · Bali</div><div class="work-name">Point of Sale System</div><div class="work-desc">A full POS app replacing a patchwork of paper orders and a cash drawer. Handles orders, tables, and daily revenue reporting in one screen.</div><div class="work-tags"><span class="tag">POS</span><span class="tag">Revenue Tracking</span><span class="tag">Table Management</span></div></div>
+      <div class="work-card c2"><div class="work-client">Local Restaurant · Bali</div><div class="work-name">Recipe & Cost Manager</div><div class="work-desc">An internal app to manage recipes, calculate ingredient costs, and keep the kitchen aligned — built specifically for their menu and workflow.</div><div class="work-tags"><span class="tag">Recipe Management</span><span class="tag">Cost Control</span><span class="tag">Kitchen Ops</span></div></div>
+      <div class="work-card c3"><div class="work-client">Swiss Brand · In Progress</div><div class="work-name">Repair Job Tracker</div><div class="work-desc">A custom repair management system tracking every job end-to-end — intake, status updates, technician assignment, and customer communication.</div><div class="work-tags"><span class="tag">Job Tracking</span><span class="tag">Status Updates</span><span class="tag">Operations</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div class="why-inner">
+    <div>
+      <div class="section-tag">Why Beachdog</div>
+      <h2>We get your<br>business first.</h2>
+      <p class="why-sub" style="margin-top:1rem">Most developers build what you describe. We build what you actually need. There's a difference — and it shows up in the product.</p>
+    </div>
+    <div class="why-points">
+      <div class="why-point"><div class="why-icon">⚡</div><div class="why-point-text"><h4>Speed that makes sense</h4><p>Apps in days or weeks. Not a 6-month project with a 3-month delay.</p></div></div>
+      <div class="why-point"><div class="why-icon">💰</div><div class="why-point-text"><h4>Price that doesn't hurt</h4><p>Roughly a third of what a traditional dev agency would charge. Same quality, less overhead.</p></div></div>
+      <div class="why-point"><div class="why-icon">🎯</div><div class="why-point-text"><h4>Fit that actually works</h4><p>We understand how small businesses operate. Every app we build solves a real operational problem — not just a technical spec.</p></div></div>
+      <div class="why-point"><div class="why-icon">🐕</div><div class="why-point-text"><h4>The Beachdog way</h4><p>Scrappy, capable, no fluff. We get things done — so you can spend your time the way you actually want to.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <h2>Ready to stop doing it manually?</h2>
+  <p>Tell us what's slowing your business down. We'll tell you if we can fix it — and how fast.</p>
+  <a href="mailto:info@beachdogsolutions.com" class="btn-white">Send us an email</a>
+  <span class="cta-email">info@beachdogsolutions.com</span>
+</section>
+
+<footer>
+  <div class="footer-logo">Beachdog<span>.</span></div>
+  <div class="footer-copy">© 2026 Beachdog Solutions. Hong Kong.</div>
+  <a href="mailto:info@beachdogsolutions.com" class="footer-email">info@beachdogsolutions.com</a>
+</footer>
+
+</body>
+</html>
