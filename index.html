@@ -8,28 +8,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --sand: #F5EFE0; --deep: #0E1A14; --bark: #3D4F45; --tide: #4A8C6F; --sun: #E8B84B; --foam: #D4EDE1; --rust: #C45C2A; }
+  :root { --sand: #F5EFE0; --deep: #0E1A14; --bark: #3D4F45; --tide: #4A8C6F; --sun: #E8B84B; --foam: #D4EDE1; }
   html { scroll-behavior: smooth; }
   body { font-family: 'Inter', sans-serif; background: var(--sand); color: var(--deep); overflow-x: hidden; }
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5rem; background: rgba(245,239,224,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(42,59,46,0.08); }
-  .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; color: var(--deep); text-decoration: none; }
+  .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--deep); text-decoration: none; }
   .nav-logo span { color: var(--tide); }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
   .nav-links a { font-size: 0.82rem; font-weight: 500; color: var(--bark); text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
   .nav-links a:hover { color: var(--tide); }
   .nav-cta { background: var(--deep) !important; color: var(--sand) !important; padding: 0.55rem 1.4rem !important; border-radius: 3px; }
-  .nav-cta:hover { background: var(--tide) !important; }
-  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 8rem 5rem 4rem; position: relative; overflow: hidden; gap: 4rem; }
+  .nav-cta:hover { background: var(--tide) !important; color: white !important; }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 5rem 4rem; position: relative; overflow: hidden; }
   .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(74,140,111,0.07) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 15% 80%, rgba(232,184,75,0.06) 0%, transparent 60%); }
   .hero-grid { position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(rgba(42,59,46,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(42,59,46,0.03) 1px, transparent 1px); background-size: 60px 60px; }
-  .hero-content { position: relative; z-index: 1; }
+  .hero-top { position: relative; z-index: 1; max-width: 700px; margin-bottom: 3.5rem; }
   .hero-tag { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tide); margin-bottom: 2rem; font-family: 'Space Grotesk', sans-serif; }
   .hero-tag::before { content: ''; width: 28px; height: 2px; background: var(--tide); }
   h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.8rem, 5vw, 5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; color: var(--deep); margin-bottom: 1.6rem; }
   h1 .accent { color: var(--tide); }
   h1 .lined { position: relative; display: inline-block; }
   h1 .lined::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 3px; background: var(--sun); border-radius: 2px; }
-  .hero-sub { font-size: 1rem; font-weight: 400; line-height: 1.75; color: var(--bark); max-width: 460px; margin-bottom: 2.5rem; }
+  .hero-sub { font-size: 1rem; line-height: 1.75; color: var(--bark); max-width: 520px; margin-bottom: 2.5rem; }
   .hero-sub strong { font-weight: 600; color: var(--deep); }
   .hero-actions { display: flex; gap: 1.2rem; align-items: center; }
   .btn-primary { background: var(--deep); color: var(--sand); padding: 0.85rem 1.8rem; font-size: 0.875rem; font-weight: 500; font-family: 'Space Grotesk', sans-serif; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; display: inline-block; }
@@ -37,21 +37,20 @@
   .btn-ghost { color: var(--bark); font-size: 0.875rem; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
   .btn-ghost:hover { color: var(--tide); }
   .btn-ghost::after { content: '→'; }
-  .hero-visual { position: relative; z-index: 1; display: flex; justify-content: center; align-items: center; }
-  .hero-card-stack { position: relative; width: 340px; height: 360px; }
-  .hcard { position: absolute; border-radius: 6px; padding: 1.4rem; box-shadow: 0 4px 24px rgba(14,26,20,0.1); width: 275px; }
-  .hcard-1 { top: 0; left: 40px; transform: rotate(-2.5deg); background: var(--deep); }
-  .hcard-2 { top: 55px; left: 0; transform: rotate(1.5deg); background: white; }
-  .hcard-3 { top: 115px; left: 48px; transform: rotate(-1deg); background: var(--foam); }
-  .hcard-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.55; margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif; color: var(--foam); }
-  .hcard-2 .hcard-label, .hcard-3 .hcard-label { color: var(--bark); }
-  .hcard-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.8rem; color: var(--sun); }
-  .hcard-2 .hcard-title, .hcard-3 .hcard-title { color: var(--deep); }
-  .hcard-bar { height: 3px; background: rgba(255,255,255,0.12); border-radius: 2px; margin-bottom: 0.35rem; overflow: hidden; }
-  .hcard-bar-fill { height: 100%; border-radius: 2px; background: var(--sun); }
-  .hcard-stat { font-size: 1.7rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: var(--tide); }
-  .hcard-stat-label { font-size: 0.72rem; color: var(--bark); margin-top: 0.2rem; }
-  .hcard-badge { display: inline-block; padding: 0.18rem 0.55rem; background: var(--tide); color: white; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2px; margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
+  .hero-cards { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+  .hero-proj-card { background: white; border-radius: 6px; padding: 1.5rem; border: 1px solid rgba(42,59,46,0.1); text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; display: block; }
+  .hero-proj-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(14,26,20,0.1); }
+  .hero-proj-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .hero-proj-card.p1::before { background: var(--tide); }
+  .hero-proj-card.p2::before { background: var(--sun); }
+  .hero-proj-card.p3::before { background: rgba(74,140,111,0.35); }
+  .proj-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tide); font-weight: 600; margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif; }
+  .proj-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; color: var(--deep); margin-bottom: 0.6rem; letter-spacing: -0.01em; }
+  .proj-desc { font-size: 0.82rem; color: var(--bark); line-height: 1.65; margin-bottom: 1rem; }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .proj-tag { font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 2px; background: var(--foam); color: var(--bark); font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+  .proj-arrow { position: absolute; bottom: 1.2rem; right: 1.2rem; color: var(--tide); font-size: 0.9rem; opacity: 0; transition: opacity 0.2s, transform 0.2s; }
+  .hero-proj-card:hover .proj-arrow { opacity: 1; transform: translateX(3px); }
   .stats-strip { background: var(--deep); padding: 2.5rem 5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
   .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 2.6rem; font-weight: 700; color: var(--sun); line-height: 1; letter-spacing: -0.02em; }
   .stat-desc { font-size: 0.82rem; color: rgba(245,239,224,0.5); margin-top: 0.4rem; }
@@ -60,34 +59,26 @@
   .section-tag::before { content: ''; width: 20px; height: 2px; background: var(--tide); }
   h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(1.9rem, 3.2vw, 2.8rem); letter-spacing: -0.025em; line-height: 1.1; color: var(--deep); margin-bottom: 1rem; }
   .how { background: white; }
-  .how-inner, .work-inner { max-width: 1100px; margin: 0 auto; }
-  .how-header, .work-header { max-width: 520px; margin-bottom: 4rem; }
+  .how-inner { max-width: 1100px; margin: 0 auto; }
+  .how-header { max-width: 520px; margin-bottom: 4rem; }
   .how-header p { font-size: 0.95rem; color: var(--bark); line-height: 1.75; margin-top: 0.8rem; }
   .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
   .step { position: relative; }
   .step-num { font-family: 'Space Grotesk', sans-serif; font-size: 3.5rem; font-weight: 700; color: rgba(74,140,111,0.1); line-height: 1; margin-bottom: 1rem; letter-spacing: -0.03em; }
   .step-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 0.6rem; }
   .step-desc { font-size: 0.875rem; color: var(--bark); line-height: 1.75; }
-  .step-arrow { position: absolute; top: 1.8rem; right: -1.5rem; color: var(--tide); opacity: 0.25; font-size: 1.4rem; }
-  .work { background: var(--sand); }
-  .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  .work-card { border: 1px solid rgba(42,59,46,0.1); border-radius: 6px; padding: 1.8rem; background: white; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
-  .work-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(14,26,20,0.09); }
-  .work-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-  .work-card.c1::before { background: var(--tide); }
-  .work-card.c2::before { background: var(--sun); }
-  .work-card.c3::before { background: rgba(74,140,111,0.3); }
-  .work-client { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tide); font-weight: 600; margin-bottom: 0.7rem; font-family: 'Space Grotesk', sans-serif; }
-  .work-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.7rem; color: var(--deep); }
-  .work-desc { font-size: 0.855rem; color: var(--bark); line-height: 1.75; margin-bottom: 1.2rem; }
-  .work-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .tag { font-size: 0.62rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.22rem 0.55rem; border-radius: 2px; background: var(--foam); color: var(--bark); font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+  .step-arrow { position: absolute; top: 1.8rem; right: -1.5rem; color: var(--tide); opacity: 0.2; font-size: 1.4rem; }
   .why { background: var(--deep); }
-  .why-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .why-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
   .why h2 { color: var(--sand); }
   .why .section-tag { color: var(--sun); }
   .why .section-tag::before { background: var(--sun); }
   .why-sub { color: rgba(245,239,224,0.6); font-size: 0.95rem; line-height: 1.8; margin-top: 1rem; }
+  .founder-block { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 1.8rem; margin-top: 2rem; }
+  .founder-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sun); font-weight: 600; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif; }
+  .founder-quote { font-size: 0.92rem; color: rgba(245,239,224,0.8); line-height: 1.8; font-style: italic; }
+  .founder-name { margin-top: 1.2rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.85rem; color: var(--sand); }
+  .founder-role { font-size: 0.75rem; color: rgba(245,239,224,0.4); margin-top: 0.2rem; }
   .why-points { display: flex; flex-direction: column; gap: 1.6rem; }
   .why-point { display: flex; gap: 1.2rem; align-items: flex-start; }
   .why-icon { width: 38px; height: 38px; border-radius: 4px; background: rgba(74,140,111,0.15); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; border: 1px solid rgba(74,140,111,0.2); }
@@ -105,20 +96,31 @@
   .footer-copy { font-size: 0.75rem; color: rgba(245,239,224,0.25); }
   .footer-email { font-size: 0.82rem; color: var(--tide); text-decoration: none; font-family: 'Space Grotesk', sans-serif; }
   .footer-email:hover { color: var(--sun); }
+
+  .guarantee { background: white; padding: 4rem 5rem; }
+  .guarantee-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 2.5rem; align-items: flex-start; background: var(--foam); border-radius: 8px; padding: 2.5rem; border: 1px solid rgba(74,140,111,0.2); }
+  .guarantee-badge { font-size: 2.5rem; flex-shrink: 0; }
+  .guarantee-content h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--deep); margin-bottom: 0.8rem; letter-spacing: -0.02em; }
+  .guarantee-content p { font-size: 0.9rem; color: var(--bark); line-height: 1.75; margin-bottom: 1.2rem; }
+  .guarantee-content strong { color: var(--deep); font-weight: 600; }
+  .guarantee-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .gpill { font-size: 0.75rem; font-weight: 600; font-family: 'Space Grotesk', sans-serif; color: var(--tide); background: white; border: 1px solid rgba(74,140,111,0.3); padding: 0.35rem 0.8rem; border-radius: 20px; }
+  @media (max-width: 900px) { .guarantee { padding: 3rem 1.5rem; } .guarantee-inner { flex-direction: column; gap: 1.5rem; padding: 1.5rem; } }
+
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   .hero-tag { animation: fadeUp 0.5s ease both; }
   h1 { animation: fadeUp 0.5s 0.1s ease both; }
   .hero-sub { animation: fadeUp 0.5s 0.2s ease both; }
   .hero-actions { animation: fadeUp 0.5s 0.3s ease both; }
-  .hero-visual { animation: fadeUp 0.7s 0.35s ease both; }
+  .hero-cards { animation: fadeUp 0.6s 0.4s ease both; }
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; } .nav-links { display: none; }
-    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 2rem; }
-    .hero-visual { display: none; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .hero-cards { grid-template-columns: 1fr; }
     section { padding: 4rem 1.5rem; }
     .stats-strip { padding: 2rem 1.5rem; grid-template-columns: repeat(3,1fr); gap: 0.5rem; }
     .stat-num { font-size: 1.8rem; }
-    .how-steps, .work-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: 1fr; }
     .why-inner { grid-template-columns: 1fr; gap: 3rem; }
     footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
   }
@@ -127,7 +129,7 @@
 <body>
 
 <nav>
-  <a class="nav-logo" href="#">Beachdog Solutions<span>.</span></a>
+  <a class="nav-logo" href="#">Beachdog Solutions</a>
   <ul class="nav-links">
     <li><a href="#work">Work</a></li>
     <li><a href="#how">Process</a></li>
@@ -139,50 +141,51 @@
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-  <div class="hero-content">
+  <div class="hero-top">
     <div class="hero-tag">Custom Apps for Real Businesses</div>
-    <h1>Your ops,<br><span class="accent">automated.</span><br><span class="lined">Done fast.</span></h1>
-    <p class="hero-sub">We build custom apps for SMEs that are <strong>drowning in manual work</strong>. Delivered in days, not months. At a third of the cost. So you can get back to spending time like a beachdog.</p>
+    <h1>Your workflows,<br><span class="accent">automated.</span><br><span class="lined">Done fast</span></h1>
+    <p class="hero-sub">We build <strong>fully custom apps</strong> around the way your business actually works — not the other way around. We adopt your workflows, eliminate the manual work, and deliver fast. So you can get back to spending time like a beachdog.</p>
     <div class="hero-actions">
       <a href="#contact" class="btn-primary">Start the Conversation</a>
       <a href="#work" class="btn-ghost">See our work</a>
     </div>
   </div>
-  <div class="hero-visual">
-    <div class="hero-card-stack">
-      <div class="hcard hcard-1">
-        <div class="hcard-label">Repair Tracker — Swiss Brand</div>
-        <div class="hcard-title">Jobs In Progress</div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:78%"></div></div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:45%;background:rgba(255,255,255,0.25)"></div></div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:90%"></div></div>
-      </div>
-      <div class="hcard hcard-2">
-        <div class="hcard-label">POS System</div>
-        <div class="hcard-title">Today's Revenue</div>
-        <div class="hcard-stat">Rp 4.2M</div>
-        <div class="hcard-stat-label">↑ 23% vs last week</div>
-      </div>
-      <div class="hcard hcard-3">
-        <div class="hcard-badge">Live App</div>
-        <div class="hcard-title">Recipe Manager</div>
-        <div style="font-size:0.78rem;color:var(--bark)">12 recipes · 4 categories · Cost tracked</div>
-      </div>
-    </div>
+  <div class="hero-cards" id="work">
+    <a href="#why" class="hero-proj-card p1">
+      <div class="proj-label">Swiss Brand · In Progress</div>
+      <div class="proj-title">Repair Job Tracker</div>
+      <div class="proj-desc">End-to-end repair management — intake, status updates, technician assignment, and customer communication in one system.</div>
+      <div class="proj-tags"><span class="proj-tag">Job Tracking</span><span class="proj-tag">Operations</span><span class="proj-tag">Status Updates</span></div>
+      <span class="proj-arrow">→</span>
+    </a>
+    <a href="#why" class="hero-proj-card p2">
+      <div class="proj-label">F&B Business</div>
+      <div class="proj-title">Point of Sale System</div>
+      <div class="proj-desc">Full POS replacing paper orders and a cash drawer. Orders, tables, and daily revenue reporting in one clean screen.</div>
+      <div class="proj-tags"><span class="proj-tag">POS</span><span class="proj-tag">Revenue Tracking</span><span class="proj-tag">Table Management</span></div>
+      <span class="proj-arrow">→</span>
+    </a>
+    <a href="#why" class="hero-proj-card p3">
+      <div class="proj-label">F&B Business</div>
+      <div class="proj-title">Recipe & Cost Manager</div>
+      <div class="proj-desc">Internal app to manage recipes, calculate ingredient costs, and keep the kitchen aligned with their actual workflow.</div>
+      <div class="proj-tags"><span class="proj-tag">Recipe Management</span><span class="proj-tag">Cost Control</span><span class="proj-tag">Kitchen Ops</span></div>
+      <span class="proj-arrow">→</span>
+    </a>
   </div>
 </section>
 
 <div class="stats-strip">
   <div><div class="stat-num">3×</div><div class="stat-desc">Cheaper than traditional dev</div></div>
   <div><div class="stat-num">Weeks</div><div class="stat-desc">Not 3–6 months</div></div>
-  <div><div class="stat-num">0 BS</div><div class="stat-desc">We solve real workflow problems</div></div>
+  <div><div class="stat-num">10+</div><div class="stat-desc">Years in business operations</div></div>
 </div>
 
 <section class="how" id="how">
   <div class="how-inner">
     <div class="how-header">
       <div class="section-tag">How it works</div>
-      <h2>Simple process.<br>Real results.</h2>
+      <h2>Simple process<br>Real results</h2>
       <p>No lengthy discovery phases. No confusing specs. We talk, we understand your operation, we build.</p>
     </div>
     <div class="how-steps">
@@ -193,66 +196,52 @@
   </div>
 </section>
 
-<section class="work" id="work">
-  <div class="work-inner">
-    <div class="work-header">
-      <div class="section-tag">Our work</div>
-      <h2>Built for businesses<br>that actually work hard.</h2>
-    </div>
-    <div class="work-grid">
-      <div class="work-card c1">
-        <div class="work-client">Swiss Brand · In Progress</div>
-        <div class="work-name">Repair Job Tracker</div>
-        <div class="work-desc">A custom repair management system tracking every job end-to-end — intake, status updates, technician assignment, and customer communication.</div>
-        <div class="work-tags"><span class="tag">Job Tracking</span><span class="tag">Status Updates</span><span class="tag">Operations</span></div>
-      </div>
-      <div class="work-card c2">
-        <div class="work-client">F&B Business</div>
-        <div class="work-name">Point of Sale System</div>
-        <div class="work-desc">A full POS app replacing paper orders and a cash drawer. Handles orders, tables, and daily revenue reporting in one clean screen.</div>
-        <div class="work-tags"><span class="tag">POS</span><span class="tag">Revenue Tracking</span><span class="tag">Table Management</span></div>
-      </div>
-      <div class="work-card c3">
-        <div class="work-client">F&B Business</div>
-        <div class="work-name">Recipe & Cost Manager</div>
-        <div class="work-desc">An internal app to manage recipes, calculate ingredient costs, and keep the kitchen aligned — built specifically for their menu and workflow.</div>
-        <div class="work-tags"><span class="tag">Recipe Management</span><span class="tag">Cost Control</span><span class="tag">Kitchen Ops</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section class="why" id="why">
   <div class="why-inner">
     <div>
       <div class="section-tag">Why Beachdog</div>
-      <h2>We get your<br>business first.</h2>
-      <p class="why-sub">Most developers build what you describe. We build what you actually need. There's a difference — and it shows up in the product.</p>
+      <h2>Built by someone who ran the operations first.</h2>
+      <p class="why-sub">Most developers build a generic solution and ask you to adapt. We do the opposite — we study how your business runs, adopt your workflows, and build something that fits like it was always there. Because it was built for you.</p>
+      <div class="founder-block">
+        <div class="founder-label">From the founder</div>
+        <div class="founder-quote">"I spent over 10 years in business operations and management before I ever wrote a line of code. I taught myself to build because I kept running into the same problem: the tools didn't fit the way real businesses actually work. So I built them myself. Now I build them for you."</div>
+        <div class="founder-name">Ali K.</div>
+        <div class="founder-role">Founder, Beachdog Solutions</div>
+      </div>
     </div>
     <div class="why-points">
-      <div class="why-point"><div class="why-icon">⚡</div><div class="why-point-text"><h4>Speed that makes sense</h4><p>Apps in days or weeks. Not a 6-month project with a 3-month delay.</p></div></div>
-      <div class="why-point"><div class="why-icon">💰</div><div class="why-point-text"><h4>Price that doesn't hurt</h4><p>Roughly a third of what a traditional dev agency would charge. Same quality, less overhead.</p></div></div>
-      <div class="why-point"><div class="why-icon">🎯</div><div class="why-point-text"><h4>Fit that actually works</h4><p>We understand how businesses operate. Every app solves a real operational problem — not just a technical spec.</p></div></div>
-      <div class="why-point"><div class="why-icon">🐕</div><div class="why-point-text"><h4>The Beachdog way</h4><p>Scrappy, capable, no fluff. We get things done so you can spend your time the way you actually want to.</p></div></div>
+      <div class="why-point"><div class="why-icon">🧠</div><div class="why-point-text"><h4>Operations-first thinking</h4><p>10+ years running and managing business operations. I know where the bottlenecks live before you finish describing them.</p></div></div>
+      <div class="why-point"><div class="why-icon">⚡</div><div class="why-point-text"><h4>Speed that makes sense</h4><p>Apps in days or weeks. Not a 6-month project with a 3-month delay and a spec document nobody reads.</p></div></div>
+      <div class="why-point"><div class="why-icon">💰</div><div class="why-point-text"><h4>Price that doesn't hurt</h4><p>Roughly a third of what a traditional agency charges. No account managers, no overhead — just the work.</p></div></div>
+      <div class="why-point"><div class="why-icon">🎯</div><div class="why-point-text"><h4>Fit that actually works</h4><p>Every app solves a real operational problem. Not a technical spec — the actual thing that's costing you time and money.</p></div></div>
     </div>
   </div>
 </section>
 
+<section class="guarantee">
+  <div class="guarantee-inner">
+    <div class="guarantee-badge">🛡️</div>
+    <div class="guarantee-content">
+      <h3>2-Week Satisfaction Guarantee</h3>
+      <p>Every app we build is scoped together with you upfront — no surprises. If what we deliver doesn't match what we agreed, we fix it immediately. If we can't get it right, <strong>you get your money back.</strong> No awkward conversations. No fine print.</p>
+      <div class="guarantee-pills">
+        <span class="gpill">✓ Built to your exact workflow</span>
+        <span class="gpill">✓ Fix or refund within 2 weeks</span>
+        <span class="gpill">✓ Transparent scope upfront</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <section class="cta-section" id="contact">
   <h2>Ready to stop doing it manually?</h2>
-  <p>Tell us what's slowing your business down. We'll tell you if we can fix it — and how fast. Chat with us directly using the widget below.</p>
-  <a href="mailto:info@beachdogsolutions.com" class="btn-white">Send us an email</a>
-  <span class="cta-note">Or use the live chat in the corner →</span>
+  <p>Tell us what's slowing your business down. We'll tell you if we can fix it — and how fast.</p>
+  <a href="/cdn-cgi/l/email-protection#6c05020a032c0e090d0f0408030b1f030019180503021f420f0301" class="btn-white">Send us an email</a>
+  <span class="cta-note"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="533a3d353c13313632303b373c34203c3f26273a3c3d207d303c3e">[email&#160;protected]</a> · or use the live chat →</span>
 </section>
 
 <footer>
-  <div class="footer-logo">Beachdog Solutions<span>.</span></div>
+  <div class="footer-logo">Beachdog Solutions</div>
   <div class="footer-copy">© 2026 Beachdog Solutions. Hong Kong.</div>
-  <a href="mailto:info@beachdogsolutions.com" class="footer-email">info@beachdogsolutions.com</a>
-</footer>
-
-<!-- TIDIO LIVE CHAT — replace YOUR_TIDIO_KEY with your actual key after signing up at tidio.com -->
-<script src="//code.tidio.co/YOUR_TIDIO_KEY.js" async></script>
-
-</body>
-</html>
+  <a href="/cdn-cgi/l/email-protection#a6cfc8c0c9e6c4c3c7c5cec2c9c1d5c9cad3d2cfc9c8d588c5c9cb
