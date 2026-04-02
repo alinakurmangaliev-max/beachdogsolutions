@@ -1,0 +1,2415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RepairFlow — Service Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F2EE;
+  --surface: #FEFCFA;
+  --surface2: #F0EDE8;
+  --border: #DDD9D2;
+  --border-light: #EAE7E1;
+  --text: #1A1714;
+  --text-2: #6B6560;
+  --text-3: #9E9890;
+  --accent: #2B4C3F;
+  --accent-light: #E8F0ED;
+  --accent-mid: #4A7A68;
+  --amber: #C4820A;
+  --amber-light: #FEF3DC;
+  --red: #B03A2E;
+  --red-light: #FDECEA;
+  --blue: #1E4A7A;
+  --blue-light: #E8F0FA;
+  --nav-w: 220px;
+  --header-h: 56px;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; height: 100vh; display: flex; overflow: hidden; }
+
+/* ── NAV ── */
+#nav { width: var(--nav-w); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
+.nav-logo { padding: 20px 16px 16px; border-bottom: 1px solid var(--border-light); }
+.nav-logo .wordmark { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--accent); letter-spacing: -0.3px; }
+.nav-logo .tagline { font-size: 10px; color: var(--text-3); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
+.nav-section { padding: 8px 0; border-bottom: 1px solid var(--border-light); }
+.nav-section-label { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.8px; padding: 8px 16px 4px; font-family: 'DM Mono', monospace; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 16px; cursor: pointer; color: var(--text-2); font-size: 13px; font-weight: 400; border-left: 3px solid transparent; transition: all 0.15s; }
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 500; border-left-color: var(--accent); }
+.nav-item svg { flex-shrink: 0; opacity: 0.7; }
+.nav-item.active svg { opacity: 1; }
+.nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; font-family: 'DM Mono', monospace; border-radius: 10px; padding: 1px 6px; min-width: 18px; text-align: center; }
+.nav-badge.amber { background: var(--amber); }
+.nav-footer { margin-top: auto; padding: 12px 16px; border-top: 1px solid var(--border-light); }
+.user-chip { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: var(--radius); cursor: pointer; }
+.user-chip:hover { background: var(--surface2); }
+.user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.user-info .name { font-size: 12px; font-weight: 500; }
+.user-info .role { font-size: 10px; color: var(--text-3); font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ── MAIN ── */
+#main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+#topbar { height: var(--header-h); background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0; }
+#topbar h1 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); font-weight: 400; letter-spacing: -0.3px; }
+#topbar .subtitle { font-size: 12px; color: var(--text-3); font-family: 'DM Mono', monospace; }
+#topbar .spacer { flex: 1; }
+.page { display: none; flex: 1; overflow-y: auto; padding: 24px; }
+.page.active { display: block; }
+
+/* ── CARDS & LAYOUT ── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.card-header { padding: 16px 20px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; gap: 12px; }
+.card-header h3 { font-size: 14px; font-weight: 500; }
+.card-body { padding: 20px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+
+/* ── KPI CARDS ── */
+.kpi { padding: 16px 20px; }
+.kpi .label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.6px; font-family: 'DM Mono', monospace; margin-bottom: 6px; }
+.kpi .value { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.kpi .sub { font-size: 11px; color: var(--text-2); }
+.kpi.accent-kpi { border-left: 3px solid var(--accent); }
+.kpi.amber-kpi { border-left: 3px solid var(--amber); }
+.kpi.red-kpi { border-left: 3px solid var(--red); }
+.kpi.blue-kpi { border-left: 3px solid var(--blue); }
+
+/* ── TABLES ── */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.6px; padding: 8px 12px; text-align: left; background: var(--surface2); border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+.tbl td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); font-size: 13px; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: var(--bg); }
+.tbl .mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+
+/* ── BADGES / PILLS ── */
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; font-family: 'DM Mono', monospace; }
+.pill.green { background: var(--accent-light); color: var(--accent); }
+.pill.amber { background: var(--amber-light); color: var(--amber); }
+.pill.red { background: var(--red-light); color: var(--red); }
+.pill.blue { background: var(--blue-light); color: var(--blue); }
+.pill.grey { background: var(--surface2); color: var(--text-2); }
+
+/* ── BUTTONS ── */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 500; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-mid); }
+.btn-secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+.btn-secondary:hover { background: var(--surface2); }
+.btn-ghost { background: transparent; color: var(--text-2); padding: 6px 10px; }
+.btn-ghost:hover { background: var(--surface2); color: var(--text); }
+.btn-danger { background: var(--red-light); color: var(--red); border: 1px solid #f3c0ba; }
+.btn-danger:hover { background: var(--red); color: #fff; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-icon { padding: 6px; border-radius: var(--radius); }
+
+/* ── FORM ── */
+.form-row { display: grid; gap: 16px; margin-bottom: 16px; }
+.form-row.cols2 { grid-template-columns: 1fr 1fr; }
+.form-row.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.form-group input, .form-group select, .form-group textarea {
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius);
+  font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--surface);
+  color: var(--text); outline: none; transition: border-color 0.15s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+.form-group textarea { resize: vertical; min-height: 72px; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+.toggle-row:last-child { border-bottom: none; }
+.toggle-label { font-size: 13px; }
+.toggle-desc { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.toggle { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; inset: 0; background: var(--border); border-radius: 20px; cursor: pointer; transition: 0.2s; }
+.toggle-slider::before { content: ''; position: absolute; width: 14px; height: 14px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+.toggle input:checked + .toggle-slider { background: var(--accent); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.tab { padding: 8px 16px; font-size: 13px; font-weight: 400; color: var(--text-2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+
+/* ── STATUS PIPELINE ── */
+.pipeline { display: flex; align-items: center; gap: 0; margin: 16px 0; overflow-x: auto; padding-bottom: 4px; }
+.pipe-step { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 80px; }
+.pipe-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text-3); transition: all 0.2s; }
+.pipe-step.done .pipe-dot { background: var(--accent); border-color: var(--accent); color: white; }
+.pipe-step.current .pipe-dot { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.pipe-label { font-size: 10px; color: var(--text-3); text-align: center; line-height: 1.2; max-width: 72px; }
+.pipe-step.done .pipe-label, .pipe-step.current .pipe-label { color: var(--accent); }
+.pipe-line { flex: 1; height: 2px; background: var(--border); min-width: 16px; }
+.pipe-line.done { background: var(--accent); }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: none; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border-radius: 12px; box-shadow: var(--shadow-lg); width: 100%; max-width: 720px; }
+.modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.modal-header h2 { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; flex: 1; }
+.modal-body { padding: 20px; max-height: 70vh; overflow-y: auto; }
+.modal-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ── ALERTS / CALLOUTS ── */
+.callout { padding: 10px 14px; border-radius: var(--radius); font-size: 13px; margin-bottom: 12px; display: flex; gap: 8px; align-items: flex-start; }
+.callout.amber { background: var(--amber-light); border-left: 3px solid var(--amber); color: #7a4f00; }
+.callout.green { background: var(--accent-light); border-left: 3px solid var(--accent); color: var(--accent); }
+.callout.red { background: var(--red-light); border-left: 3px solid var(--red); color: var(--red); }
+.callout.blue { background: var(--blue-light); border-left: 3px solid var(--blue); color: var(--blue); }
+
+/* ── MISC ── */
+.section-title { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
+.section-sub { font-size: 12px; color: var(--text-3); margin-bottom: 20px; font-family: 'DM Mono', monospace; }
+.divider { height: 1px; background: var(--border-light); margin: 20px 0; }
+.empty-state { text-align: center; padding: 48px 24px; color: var(--text-3); }
+.empty-state svg { margin: 0 auto 12px; opacity: 0.3; display: block; }
+.empty-state p { font-size: 13px; }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid var(--border); border-radius: 20px; font-size: 11px; color: var(--text-2); background: var(--surface); }
+.right { text-align: right; }
+.muted { color: var(--text-3); }
+.mono { font-family: 'DM Mono', monospace; }
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.w-full { width: 100%; }
+.text-sm { font-size: 12px; }
+.text-xs { font-size: 11px; }
+.fw-500 { font-weight: 500; }
+.inline-edit { border: none; background: transparent; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); padding: 2px 4px; border-radius: 4px; width: 100%; }
+.inline-edit:focus { outline: 1px solid var(--accent); background: var(--surface); }
+.tag { display: inline-block; background: var(--surface2); color: var(--text-2); font-size: 11px; padding: 2px 7px; border-radius: 4px; font-family: 'DM Mono', monospace; margin: 1px; }
+.scroll-x { overflow-x: auto; }
+select option { font-size: 13px; }
+.db-note { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text-3); background: var(--surface2); border: 1px dashed var(--border); border-radius: 4px; padding: 2px 7px; }
+
+/* ── PRINT ── */
+@media print {
+  #nav, #topbar, .no-print { display: none !important; }
+  body { overflow: visible; height: auto; }
+  #main { overflow: visible; height: auto; }
+  .page { display: block !important; overflow: visible; height: auto; padding: 0; }
+  .modal-overlay { position: static; padding: 0; background: none; display: block !important; }
+  .modal { box-shadow: none; max-width: 100%; }
+}
+
+/* ── CHART BARS ── */
+.bar-chart { display: flex; flex-direction: column; gap: 8px; }
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar-label { font-size: 12px; color: var(--text-2); width: 120px; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; height: 18px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.6s ease; }
+.bar-fill.amber { background: var(--amber); }
+.bar-fill.blue { background: var(--blue); }
+.bar-val { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text-2); width: 40px; }
+</style>
+</head><body>
+<!-- NAV HTML -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="wordmark">RepairFlow</div>
+    <div class="tagline">Service Tracker</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Operations</div>
+    <div class="nav-item active" onclick="goTo('dashboard')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity=".5"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity=".5"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity=".5"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="goTo('repairs')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3h12M2 6h8M2 9h10M2 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      All Repairs
+      <span class="nav-badge" id="nav-badge-open">0</span>
+    </div>
+    <div class="nav-item" onclick="goTo('newrepair')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      New Repair
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Inventory</div>
+    <div class="nav-item" onclick="goTo('parts')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="5" width="14" height="9" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 5V3a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.5"/></svg>
+      Spare Parts
+      <span class="nav-badge amber" id="nav-badge-parts">0</span>
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Finance</div>
+    <div class="nav-item" onclick="goTo('invoices')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 5h6M5 8h6M5 11h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Partner Invoices
+      <span class="nav-badge" id="nav-badge-inv">0</span>
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Comms</div>
+    <div class="nav-item" onclick="goTo('notifications')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5A5 5 0 0 0 3 6.5v3L1.5 11h13L13 9.5v-3A5 5 0 0 0 8 1.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M6 11.5a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.5"/></svg>
+      Notifications
+    </div>
+    <div class="nav-item" onclick="goTo('notiflog')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1 2h14M1 6h10M1 10h12M1 14h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Notification Log
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Insights</div>
+    <div class="nav-item" onclick="goTo('reports')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 13V8l3-3 3 2 3-4 3 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Reports
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Settings</div>
+    <div class="nav-item" onclick="goTo('admin')">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Admin Settings
+    </div>
+  </div>
+  <div class="nav-footer">
+    <div class="user-chip">
+      <div class="user-avatar" id="user-avatar">AC</div>
+      <div class="user-info">
+        <div class="name" id="user-name">Alex Chen</div>
+        <div class="role" id="user-role">Admin</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<div id="main">
+<div id="topbar">
+  <h1 id="page-title">Dashboard</h1>
+  <span class="subtitle" id="page-sub">Overview</span>
+  <div class="spacer"></div>
+  <span class="db-note">⚡ In-memory data — connect DB to persist</span>
+</div>
+
+<!-- ═══════════════════════════════════ DASHBOARD ═══════════════════════════════════ -->
+<div class="page active" id="page-dashboard">
+  <div class="grid4 mb-24" id="dash-kpis"></div>
+  <div class="grid2">
+    <div>
+      <div class="card mb-16">
+        <div class="card-header"><h3>⚠ Overdue Repairs</h3></div>
+        <div id="dash-overdue"></div>
+      </div>
+      <div class="card mb-16">
+        <div class="card-header"><h3>⏳ Ready for Pickup (stale &gt;5 days)</h3></div>
+        <div id="dash-stale"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>✦ Goodwill Repairs</h3></div>
+        <div id="dash-goodwill"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb-16">
+        <div class="card-header"><h3>📦 Parts Alerts</h3></div>
+        <div id="dash-parts-alert"></div>
+      </div>
+      <div class="card mb-16">
+        <div class="card-header"><h3>Repairs by Model</h3></div>
+        <div class="card-body" id="dash-model-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Workshop Split</h3></div>
+        <div class="card-body" id="dash-ws-chart"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ ALL REPAIRS ═══════════════════════════════════ -->
+<div class="page" id="page-repairs">
+  <div class="flex-between mb-16">
+    <div class="flex gap-8">
+      <input type="text" placeholder="Search customer, ID, model…" id="repairs-search" oninput="renderRepairs()" style="padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--surface);width:220px;">
+      <select id="repairs-status-filter" onchange="renderRepairs()" style="padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--surface);">
+        <option value="">All statuses</option>
+      </select>
+      <select id="repairs-ws-filter" onchange="renderRepairs()" style="padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--surface);">
+        <option value="">All workshops</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="goTo('newrepair')">+ New Repair</button>
+  </div>
+  <div class="card">
+    <div class="scroll-x">
+      <table class="tbl" id="repairs-table">
+        <thead><tr>
+          <th>Repair ID</th><th>Customer</th><th>Model</th><th>Repair Type</th>
+          <th>Workshop</th><th>Status</th><th>Warranty</th><th>ETA</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="repairs-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════ NEW REPAIR ═══════════════════════════════════ -->
+<div class="page" id="page-newrepair">
+  <div class="section-title">New Repair</div>
+  <div class="section-sub">Fill in customer and item details — routing is automatic</div>
+  <div class="grid2 gap-12">
+    <!-- LEFT: Customer + Item -->
+    <div>
+      <div class="card mb-16">
+        <div class="card-header"><h3>Customer Details</h3></div>
+        <div class="card-body">
+          <div class="form-row cols2">
+            <div class="form-group"><label>First Name</label><input id="nr-fname" type="text" placeholder="Sophie"></div>
+            <div class="form-group"><label>Last Name</label><input id="nr-lname" type="text" placeholder="Müller"></div>
+          </div>
+          <div class="form-row cols2">
+            <div class="form-group"><label>Email</label><input id="nr-email" type="email" placeholder="sophie@example.com"></div>
+            <div class="form-group"><label>Phone</label><input id="nr-phone" type="text" placeholder="+41 79 123 45 67"></div>
+          </div>
+          <div class="form-row cols2">
+            <div class="form-group"><label>Country</label>
+              <select id="nr-country" onchange="updateCarrier()">
+                <option value="CH">Switzerland (CH)</option>
+                <option value="DE">Germany (DE)</option>
+                <option value="AT">Austria (AT)</option>
+                <option value="FR">France (FR)</option>
+                <option value="IT">Italy (IT)</option>
+                <option value="UK">United Kingdom (UK)</option>
+                <option value="US">United States (US)</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Order / Bill No.</label><input id="nr-order" type="text" placeholder="ORD-2024-1234"></div>
+          </div>
+          <div id="nr-customs-warning" class="callout amber" style="display:none">
+            ⚠ International shipment — customs declaration required. Add commercial invoice value.
+          </div>
+          <div class="form-group"><label>Delivery Address (if sending back)</label><textarea id="nr-address" placeholder="Street, City, Postcode, Country"></textarea></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Item Details</h3></div>
+        <div class="card-body">
+          <div class="form-row cols2">
+            <div class="form-group"><label>Model</label>
+              <select id="nr-model">
+                <option value="">Select model…</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Color</label>
+              <select id="nr-color">
+                <option value="">Select color…</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row cols2">
+            <div class="form-group"><label>Purchase Date</label><input id="nr-saledate" type="date" onchange="updateWarranty()"></div>
+            <div class="form-group"><label>Drop-off Method</label>
+              <select id="nr-dropoff">
+                <option value="In-store">In-store drop-off</option>
+                <option value="Sent in">Sent in by customer</option>
+              </select>
+            </div>
+          </div>
+          <div id="nr-warranty-status" class="callout green" style="display:none"></div>
+          <div class="form-group"><label>Repair Type</label>
+            <select id="nr-reptype" onchange="updateRouting()">
+              <option value="">Select repair type…</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Notes</label><textarea id="nr-notes" placeholder="Describe the issue in detail…"></textarea></div>
+          <div class="form-group">
+            <label>Repair Price (customer)</label>
+            <input id="nr-price" type="number" placeholder="0">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT: Routing preview -->
+    <div>
+      <div class="card mb-16" id="nr-routing-card">
+        <div class="card-header"><h3>Auto-routing</h3></div>
+        <div class="card-body" id="nr-routing-body">
+          <div class="empty-state"><p>Select repair type to see routing</p></div>
+        </div>
+      </div>
+      <div class="card" id="nr-journey-card">
+        <div class="card-header"><h3>Shipment Legs</h3></div>
+        <div class="card-body" id="nr-journey-body">
+          <div class="empty-state"><p>Select repair type to build journey</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex gap-8 mt-24">
+    <button class="btn btn-primary" onclick="saveNewRepair()">✓ Create Repair</button>
+    <button class="btn btn-secondary" onclick="goTo('repairs')">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ SPARE PARTS ═══════════════════════════════════ -->
+<div class="page" id="page-parts">
+  <div class="flex-between mb-16">
+    <div>
+      <div class="section-title">Spare Parts</div>
+      <div class="section-sub">Read-only inventory — managed in your shop platform</div>
+    </div>
+    <div class="flex gap-8">
+      <span id="shopify-status-chip"></span>
+      <button class="btn btn-secondary btn-sm" onclick="alert('Connect Shopify in Admin → Integrations to enable live sync.')">⟳ Sync</button>
+    </div>
+  </div>
+  <div id="parts-alerts-row" class="mb-16"></div>
+  <div class="card">
+    <div class="card-header flex-between">
+      <h3>All Parts</h3>
+      <input type="text" placeholder="Search parts…" id="parts-search" oninput="renderParts()" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;background:var(--surface);width:180px;">
+    </div>
+    <div class="scroll-x">
+      <table class="tbl">
+        <thead><tr><th>SKU</th><th>Name</th><th>Model</th><th>In Stock</th><th>Reorder At</th><th>Unit Price</th><th>Status</th><th>Shop</th></tr></thead>
+        <tbody id="parts-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PARTNER INVOICES ═══════════════════════════════════ -->
+<div class="page" id="page-invoices">
+  <div class="flex-between mb-16">
+    <div>
+      <div class="section-title">Partner Invoice Tracker</div>
+      <div class="section-sub">Batch billing with your production partner</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openNewBatch()">+ New Batch</button>
+  </div>
+  <div id="invoices-list"></div>
+</div>
+<!-- ═══════════════════════════════════ NOTIFICATIONS ═══════════════════════════════════ -->
+<div class="page" id="page-notifications">
+  <div class="section-title">Notifications</div>
+  <div class="section-sub">Send manual triggers and manage automated comms</div>
+  <div class="tabs" id="notif-tabs">
+    <div class="tab active" onclick="notifTab('workshop')">Workshop Triggers</div>
+    <div class="tab" onclick="notifTab('customer')">Customer Triggers</div>
+    <div class="tab" onclick="notifTab('delay')">Delay Notices</div>
+  </div>
+
+  <!-- WORKSHOP TRIGGERS -->
+  <div id="notif-panel-workshop">
+    <div class="callout blue mb-16">📌 Triggers fire when you confirm the action below. A preview email is shown before sending.</div>
+    <div id="ws-trigger-list"></div>
+  </div>
+
+  <!-- CUSTOMER TRIGGERS -->
+  <div id="notif-panel-customer" style="display:none">
+    <div class="callout blue mb-16">💬 Customer notifications require a return tracking number where applicable.</div>
+    <div id="cust-trigger-list"></div>
+  </div>
+
+  <!-- DELAY NOTICES -->
+  <div id="notif-panel-delay" style="display:none">
+    <div class="callout amber mb-16">⚠ Repairs past their ETA — send delay notice to customer.</div>
+    <div id="delay-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ NOTIFICATION LOG ═══════════════════════════════════ -->
+<div class="page" id="page-notiflog">
+  <div class="flex-between mb-16">
+    <div>
+      <div class="section-title">Notification Log</div>
+      <div class="section-sub">All sent communications</div>
+    </div>
+    <input type="text" placeholder="Search log…" id="log-search" oninput="renderNotifLog()" style="padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--surface);width:200px;">
+  </div>
+  <div class="card">
+    <table class="tbl">
+      <thead><tr><th>ID</th><th>Type</th><th>Repair</th><th>Recipient</th><th>Subject</th><th>Sent At</th><th>Status</th><th></th></tr></thead>
+      <tbody id="notiflog-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ REPORTS ═══════════════════════════════════ -->
+<div class="page" id="page-reports">
+  <div class="flex-between mb-16">
+    <div>
+      <div class="section-title">Reports</div>
+      <div class="section-sub">Performance overview and export</div>
+    </div>
+    <div class="flex gap-8">
+      <select id="rpt-period" onchange="renderReports()" style="padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--surface);">
+        <option value="month">This Month</option>
+        <option value="lastmonth">Last Month</option>
+        <option value="year">This Year</option>
+        <option value="all">All Time</option>
+      </select>
+      <button class="btn btn-secondary btn-sm" onclick="exportReportCSV()">↓ CSV</button>
+      <button class="btn btn-secondary btn-sm" onclick="exportReportPDF()">↓ PDF</button>
+      <button class="btn btn-secondary btn-sm" title="Connect Google Drive first" onclick="alert('Connect Google Drive in Admin → Integrations to enable direct export.')" style="opacity:0.5;cursor:default;">Google Sheets ↗</button>
+    </div>
+  </div>
+  <div class="grid4 mb-24" id="rpt-kpis"></div>
+  <div class="grid2 mb-24">
+    <div class="card">
+      <div class="card-header"><h3>Revenue Breakdown</h3></div>
+      <div class="card-body" id="rpt-breakdown-chart"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Repairs by Model</h3></div>
+      <div class="card-body" id="rpt-model-chart"></div>
+    </div>
+  </div>
+  <div class="card mb-24">
+    <div class="card-header flex-between">
+      <h3>Goodwill Repairs — Reasons Log</h3>
+      <span class="pill amber" id="rpt-goodwill-count"></span>
+    </div>
+    <div id="rpt-goodwill-list"></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>All Repairs in Period</h3></div>
+    <div class="scroll-x">
+      <table class="tbl">
+        <thead><tr><th>ID</th><th>Customer</th><th>Model</th><th>Repair Type</th><th>Workshop</th><th>Warranty</th><th>Price</th><th>Cost</th><th>Margin</th><th>Status</th></tr></thead>
+        <tbody id="rpt-table-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════ ADMIN SETTINGS ═══════════════════════════════════ -->
+<div class="page" id="page-admin">
+  <div class="section-title">Admin Settings</div>
+  <div class="section-sub">Configure your RepairFlow instance</div>
+  <div class="tabs" id="admin-tabs">
+    <div class="tab active" onclick="adminTab('brand')">Logo & Config</div>
+    <div class="tab" onclick="adminTab('workshops')">Workshops</div>
+    <div class="tab" onclick="adminTab('routing')">Repair Routing</div>
+    <div class="tab" onclick="adminTab('triggers')">Trigger Rules</div>
+    <div class="tab" onclick="adminTab('templates')">Email Templates</div>
+    <div class="tab" onclick="adminTab('parts-admin')">Spare Parts</div>
+    <div class="tab" onclick="adminTab('catalogue')">Product Catalogue</div>
+    <div class="tab" onclick="adminTab('reptypes')">Repair Types</div>
+    <div class="tab" onclick="adminTab('users')">Users & Roles</div>
+    <div class="tab" onclick="adminTab('integrations')">Integrations</div>
+  </div>
+
+  <!-- BRAND / CONFIG -->
+  <div id="admin-panel-brand">
+    <div class="grid2">
+      <div class="card">
+        <div class="card-header"><h3>Brand & Logo</h3></div>
+        <div class="card-body">
+          <div class="form-group mb-16">
+            <label>Logo (PNG/JPG/SVG, max 2MB)</label>
+            <div style="border:2px dashed var(--border);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;background:var(--surface2)" onclick="document.getElementById('logo-input').click()">
+              <div id="logo-preview" style="margin-bottom:8px;">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="opacity:.3;margin:0 auto"><rect width="32" height="32" rx="4" fill="currentColor" opacity=".1"/><path d="M6 22l6-7 4 5 3-3 7 5H6Z" fill="currentColor" opacity=".4"/><circle cx="22" cy="10" r="3" fill="currentColor" opacity=".4"/></svg>
+              </div>
+              <div style="font-size:12px;color:var(--text-3)">Click to upload logo</div>
+            </div>
+            <input type="file" id="logo-input" accept="image/*" style="display:none" onchange="previewLogo(this)">
+          </div>
+          <div class="form-group">
+            <label>Brand Name (internal display)</label>
+            <input type="text" id="s-brand" value="RepairFlow Demo">
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Store Configuration</h3></div>
+        <div class="card-body">
+          <div class="form-group mb-16"><label>Repair Email</label><input type="email" id="s-email" value="repairs@yourbrand.com"></div>
+          <div class="form-group mb-16"><label>Store Address</label><input type="text" id="s-address" value="Main Street 1, 8001 Zurich"></div>
+          <div class="form-group mb-16"><label>Store Hours</label><input type="text" id="s-hours" value="Mon–Fri 10–18, Sat 10–16"></div>
+          <div class="form-group mb-16"><label>Website</label><input type="text" id="s-web" value="www.yourbrand.com"></div>
+          <div class="form-row cols2">
+            <div class="form-group"><label>Warranty Period (years)</label><input type="number" id="s-warranty" min="1" max="10" value="2"></div>
+            <div class="form-group"><label>Goodwill Grace (days)</label><input type="number" id="s-goodwill" min="0" max="90" value="14"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-16"><button class="btn btn-primary" onclick="saveConfig()">Save Configuration</button></div>
+  </div>
+
+  <!-- WORKSHOPS -->
+  <div id="admin-panel-workshops" style="display:none">
+    <div class="flex-between mb-16">
+      <span class="text-sm muted">Click any field to edit inline</span>
+      <button class="btn btn-primary btn-sm" onclick="addWorkshop()">+ Add Workshop</button>
+    </div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Name</th><th>Location</th><th>Contact</th><th>Email</th><th>ETA (days)</th><th>Active</th><th></th></tr></thead>
+        <tbody id="ws-admin-tbody"></tbody>
+      </table>
+    </div>
+    <div class="mt-16"><button class="btn btn-primary" onclick="saveWorkshops()">Save Workshops</button></div>
+  </div>
+
+  <!-- REPAIR ROUTING -->
+  <div id="admin-panel-routing" style="display:none">
+    <div class="callout blue mb-16">💡 Routing assigns incoming repairs to the correct workshop based on repair type. Items requiring stitching are automatically routed to your Production Partner.</div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Repair Type</th><th>Default Workshop</th><th>Requires Stitching</th><th>Active</th></tr></thead>
+        <tbody id="routing-tbody"></tbody>
+      </table>
+    </div>
+    <div class="mt-16"><button class="btn btn-primary" onclick="saveRouting()">Save Routing</button></div>
+  </div>
+
+  <!-- TRIGGER RULES -->
+  <div id="admin-panel-triggers" style="display:none">
+    <div class="card">
+      <div class="card-header"><h3>Automated Notification Triggers</h3></div>
+      <div class="card-body">
+        <div class="toggle-row">
+          <div><div class="toggle-label">Item shipped to workshop</div><div class="toggle-desc">Email sent when outbound tracking is added</div></div>
+          <label class="toggle"><input type="checkbox" id="tr-workshopShipped"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Item arrived at workshop</div><div class="toggle-desc">Email sent when status set to "At Workshop"</div></div>
+          <label class="toggle"><input type="checkbox" id="tr-workshopArrived"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Workshop repair complete</div><div class="toggle-desc">Internal trigger for packing and return shipment</div></div>
+          <label class="toggle"><input type="checkbox" id="tr-workshopDone"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Item shipped back to customer</div><div class="toggle-desc">Email with return TRK link</div></div>
+          <label class="toggle"><input type="checkbox" id="tr-returnShipped"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Ready for pickup</div><div class="toggle-desc">Email when status set to "Ready / Out for delivery"</div></div>
+          <label class="toggle"><input type="checkbox" id="tr-readyPickup"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Delay notice</div><div class="toggle-desc">Manual trigger when repair is past ETA</div></div>
+          <label class="toggle"><input type="checkbox" id="tr-delayNotice"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="mt-16"><button class="btn btn-primary" onclick="saveTriggers()">Save Trigger Rules</button></div>
+  </div>
+
+  <!-- EMAIL TEMPLATES -->
+  <div id="admin-panel-templates" style="display:none">
+    <div class="callout blue mb-16">Variables: <span class="tag">{{customer_first_name}}</span> <span class="tag">{{model}}</span> <span class="tag">{{repair_id}}</span> <span class="tag">{{workshop_name}}</span> <span class="tag">{{repair_type}}</span> <span class="tag">{{trk_link}}</span> <span class="tag">{{eta}}</span> <span class="tag">{{new_eta}}</span> <span class="tag">{{delay_reason}}</span> <span class="tag">{{store_address}}</span> <span class="tag">{{store_hours}}</span> <span class="tag">{{brand_name}}</span> <span class="tag">{{warranty_line}}</span></div>
+    <div id="templates-list"></div>
+    <div class="mt-16"><button class="btn btn-primary" onclick="saveTemplates()">Save Templates</button></div>
+  </div>
+
+  <!-- SPARE PARTS ADMIN -->
+  <div id="admin-panel-parts-admin" style="display:none">
+    <div class="flex-between mb-16">
+      <div>
+        <div style="font-size:13px;color:var(--text-2)">Import CSV or edit inline. Export for records.</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:2px;">Expected columns: sku, name, model, stock, reorder_at, price</div>
+      </div>
+      <div class="flex gap-8">
+        <label class="btn btn-secondary btn-sm" style="cursor:pointer">
+          ↑ Import CSV <input type="file" accept=".csv" style="display:none" onchange="importPartsCSV(this)">
+        </label>
+        <button class="btn btn-secondary btn-sm" onclick="exportPartsCSV()">↓ CSV</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportPartsPDF()">↓ PDF</button>
+        <button class="btn btn-primary btn-sm" onclick="addPart()">+ Add Part</button>
+      </div>
+    </div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>SKU</th><th>Name</th><th>Model</th><th>Stock</th><th>Reorder At</th><th>Price</th><th>Active</th><th></th></tr></thead>
+        <tbody id="parts-admin-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PRODUCT CATALOGUE -->
+  <div id="admin-panel-catalogue" style="display:none">
+    <div class="flex-between mb-16">
+      <div style="font-size:13px;color:var(--text-2)">Manage your product models. Import CSV or edit inline.</div>
+      <div class="flex gap-8">
+        <label class="btn btn-secondary btn-sm" style="cursor:pointer">↑ Import CSV <input type="file" accept=".csv" style="display:none" onchange="importCatalogueCSV(this)"></label>
+        <button class="btn btn-secondary btn-sm" onclick="exportCatalogueCSV()">↓ CSV</button>
+        <button class="btn btn-primary btn-sm" onclick="addProduct()">+ Add Model</button>
+      </div>
+    </div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Model Name</th><th>Variants / Colors</th><th>Active</th><th></th></tr></thead>
+        <tbody id="catalogue-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REPAIR TYPES -->
+  <div id="admin-panel-reptypes" style="display:none">
+    <div class="flex-between mb-16">
+      <div style="font-size:13px;color:var(--text-2)">Edit repair types and their default routing.</div>
+      <div class="flex gap-8">
+        <button class="btn btn-secondary btn-sm" onclick="exportRepTypesCSV()">↓ CSV</button>
+        <button class="btn btn-primary btn-sm" onclick="addRepType()">+ Add Type</button>
+      </div>
+    </div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Repair Type</th><th>Default Workshop</th><th>Stitching Required</th><th>Active</th><th></th></tr></thead>
+        <tbody id="reptypes-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div id="admin-panel-users" style="display:none">
+    <div class="flex-between mb-16">
+      <div style="font-size:13px;color:var(--text-2)">Manage team access and roles.</div>
+      <button class="btn btn-primary btn-sm" onclick="inviteUser()">+ Invite User</button>
+    </div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+    </div>
+    <div class="mt-16 card card-body">
+      <div style="font-size:13px;font-weight:500;margin-bottom:12px;">Role Permissions</div>
+      <table class="tbl">
+        <thead><tr><th>Permission</th><th>Staff</th><th>Senior</th><th>Manager</th><th>Admin</th></tr></thead>
+        <tbody>
+          <tr><td>View & update repairs</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Create new repairs</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Send notifications</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>View goodwill repairs</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Grant goodwill</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Partner invoice tracker</td><td></td><td></td><td>✓</td><td>✓</td></tr>
+          <tr><td>View margins & reports</td><td></td><td></td><td>✓</td><td>✓</td></tr>
+          <tr><td>Admin settings</td><td></td><td></td><td></td><td>✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INTEGRATIONS -->
+  <div id="admin-panel-integrations" style="display:none">
+    <div class="grid2">
+      <div class="card">
+        <div class="card-header"><h3>Email & Calendar</h3></div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div><div class="toggle-label">Gmail</div><div class="toggle-desc">Send notifications directly from your inbox</div></div>
+            <button class="btn btn-secondary btn-sm" id="btn-gmail" onclick="toggleIntegration('gmail')">Connect</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Storage & Export</h3></div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div><div class="toggle-label">Google Drive</div><div class="toggle-desc">Export reports directly to Google Sheets</div></div>
+            <button class="btn btn-secondary btn-sm" id="btn-gdrive" onclick="toggleIntegration('googleDrive')">Connect</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Commerce</h3></div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div><div class="toggle-label">Shopify</div><div class="toggle-desc">Live spare parts inventory sync</div></div>
+            <button class="btn btn-secondary btn-sm" id="btn-shopify" onclick="toggleIntegration('shopify')">Connect</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Customer Support</h3></div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div><div class="toggle-label">Gorgias</div><div class="toggle-desc">Link repair tickets to Gorgias conversations</div></div>
+            <button class="btn btn-secondary btn-sm" id="btn-gorgias" onclick="toggleIntegration('gorgias')">Connect</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Shipping APIs <span class="pill amber" style="margin-left:8px">Premium</span></h3></div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div><div class="toggle-label">DHL API</div><div class="toggle-desc">Auto-track DE and international shipments</div></div>
+            <button class="btn btn-secondary btn-sm" onclick="alert('Shipping API integration is a premium add-on. Contact us to enable.')">Upgrade</button>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Post CH API</div><div class="toggle-desc">Auto-track Swiss shipments</div></div>
+            <button class="btn btn-secondary btn-sm" onclick="alert('Shipping API integration is a premium add-on. Contact us to enable.')">Upgrade</button>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">FedEx API</div><div class="toggle-desc">Auto-track international shipments</div></div>
+            <button class="btn btn-secondary btn-sm" onclick="alert('Shipping API integration is a premium add-on. Contact us to enable.')">Upgrade</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════ REPAIR DETAIL MODAL ═══════════════════════════════════ -->
+<div class="modal-overlay" id="repair-modal">
+  <div class="modal" style="max-width:800px">
+    <div class="modal-header no-print">
+      <div>
+        <h2 id="rm-title">Repair Detail</h2>
+        <div class="flex gap-8 mt-8" id="rm-badges"></div>
+      </div>
+      <div class="flex gap-8 ml-auto">
+        <button class="btn btn-secondary btn-sm" onclick="openTraveller()">🖨 Print Traveller</button>
+        <button class="btn btn-ghost" onclick="closeModal('repair-modal')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <!-- Pipeline -->
+      <div class="card mb-16">
+        <div class="card-header"><h3>Pipeline</h3></div>
+        <div class="card-body">
+          <div class="pipeline" id="rm-pipeline"></div>
+          <div class="flex-between mt-16">
+            <div>
+              <label style="font-size:12px;color:var(--text-2);font-weight:500">Update Status</label>
+              <div class="flex gap-8 mt-8">
+                <select id="rm-status-select" style="padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--surface);"></select>
+                <button class="btn btn-primary btn-sm" onclick="updateRepairStatus()">Update</button>
+              </div>
+            </div>
+            <div id="rm-delay-box" style="display:none">
+              <div class="callout amber" style="margin:0">
+                ⚠ Past ETA — <button class="btn btn-ghost btn-sm" onclick="openDelayNotice()" style="padding:2px 8px;font-size:12px">Send Delay Notice</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Details grid -->
+      <div class="grid2 gap-12 mb-16">
+        <div class="card">
+          <div class="card-header"><h3>Customer</h3></div>
+          <div class="card-body" id="rm-customer"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Item & Repair</h3></div>
+          <div class="card-body" id="rm-item"></div>
+        </div>
+      </div>
+      <!-- Shipment Legs -->
+      <div class="card mb-16">
+        <div class="card-header"><h3>Shipment Legs</h3></div>
+        <div class="card-body" id="rm-legs"></div>
+      </div>
+      <!-- Goodwill section (senior/manager/admin only) -->
+      <div class="card mb-16" id="rm-goodwill-section">
+        <div class="card-header"><h3>✦ Goodwill</h3></div>
+        <div class="card-body" id="rm-goodwill-body"></div>
+      </div>
+    </div>
+    <div class="modal-footer no-print">
+      <button class="btn btn-secondary" onclick="closeModal('repair-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ TRAVELLER SLIP MODAL ═══════════════════════════════════ -->
+<div class="modal-overlay" id="traveller-modal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header no-print">
+      <h2>Traveller Slip</h2>
+      <div class="flex gap-8 ml-auto">
+        <button class="btn btn-primary btn-sm" onclick="printTraveller()">🖨 Print</button>
+        <button class="btn btn-ghost" onclick="closeModal('traveller-modal')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="traveller-body" style="padding:32px">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ NOTIFICATION PREVIEW MODAL ═══════════════════════════════════ -->
+<div class="modal-overlay" id="notif-preview-modal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h2>Email Preview</h2>
+      <button class="btn btn-ghost" onclick="closeModal('notif-preview-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-16">
+        <label>To</label>
+        <input type="email" id="np-to" readonly style="background:var(--surface2)">
+      </div>
+      <div class="form-group mb-16">
+        <label>Subject</label>
+        <input type="text" id="np-subject">
+      </div>
+      <div class="form-group mb-16">
+        <label>Body</label>
+        <textarea id="np-body" style="min-height:200px"></textarea>
+      </div>
+      <div id="np-trk-row" class="form-group mb-16" style="display:none">
+        <label>Tracking Number</label>
+        <input type="text" id="np-trk" placeholder="Enter tracking number">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('notif-preview-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmSendNotif()">✓ Send Notification</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELAY NOTICE MODAL -->
+<div class="modal-overlay" id="delay-modal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h2>Send Delay Notice</h2>
+      <button class="btn btn-ghost" onclick="closeModal('delay-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="callout amber mb-16">The customer will receive an email explaining the delay.</div>
+      <div class="form-group mb-16">
+        <label>Reason for delay</label>
+        <textarea id="delay-reason" placeholder="e.g. Waiting for replacement zipper from supplier — shipment delayed by 3 days" style="min-height:80px"></textarea>
+      </div>
+      <div class="form-group mb-16">
+        <label>New expected return date</label>
+        <input type="date" id="delay-new-eta">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('delay-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="sendDelayNotice()">Send Delay Notice</button>
+    </div>
+  </div>
+</div>
+
+<!-- GOODWILL MODAL -->
+<div class="modal-overlay" id="goodwill-modal">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <h2>Grant Goodwill Repair</h2>
+      <button class="btn btn-ghost" onclick="closeModal('goodwill-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="callout amber mb-16">Customer will see <strong>"Covered by your brand"</strong> — not "goodwill".</div>
+      <div class="form-group">
+        <label>Internal Reason (required)</label>
+        <textarea id="goodwill-reason" placeholder="e.g. Long-term client, first repair request, director approval" style="min-height:80px"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('goodwill-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmGoodwill()">Grant Goodwill</button>
+    </div>
+  </div>
+</div>
+
+<!-- INVITE USER MODAL -->
+<div class="modal-overlay" id="invite-modal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <h2>Invite Team Member</h2>
+      <button class="btn btn-ghost" onclick="closeModal('invite-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-16"><label>Name</label><input type="text" id="inv-name" placeholder="Full name"></div>
+      <div class="form-group mb-16"><label>Email</label><input type="email" id="inv-email" placeholder="name@yourbrand.com"></div>
+      <div class="form-group"><label>Role</label>
+        <select id="inv-role">
+          <option value="Staff">Staff</option>
+          <option value="Senior">Senior</option>
+          <option value="Manager">Manager</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('invite-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmInvite()">Send Invite</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW BATCH MODAL -->
+<div class="modal-overlay" id="batch-modal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <h2>New Partner Batch</h2>
+      <button class="btn btn-ghost" onclick="closeModal('batch-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row cols2 mb-16">
+        <div class="form-group"><label>Partner</label><input type="text" id="batch-partner" value="Production Partner"></div>
+        <div class="form-group"><label>Period</label><input type="text" id="batch-period" placeholder="e.g. Feb 2025"></div>
+      </div>
+      <div class="callout blue mb-16">Select the repairs to include in this batch:</div>
+      <div id="batch-repairs-list"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('batch-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmBatch()">Create Batch</button>
+    </div>
+  </div>
+</div>
+</div></div>
+<script>
+// ════════════════════════════════════════════════
+// DB PLACEHOLDER LAYER
+// Replace these functions with real API calls when connecting a backend.
+// All data currently lives in memory (resets on page reload).
+// ════════════════════════════════════════════════
+const DB = {
+  // TODO: Replace with fetch('/api/repairs') etc.
+  async getRepairs() { return [...appData.repairs]; },
+  async getRepair(id) { return appData.repairs.find(r => r.id === id); },
+  async saveRepair(r) {
+    const idx = appData.repairs.findIndex(x => x.id === r.id);
+    if (idx >= 0) appData.repairs[idx] = r; else appData.repairs.unshift(r);
+    return r;
+  },
+  async getParts() { return [...appData.parts]; },
+  async savePart(p) {
+    const idx = appData.parts.findIndex(x => x.id === p.id);
+    if (idx >= 0) appData.parts[idx] = p; else appData.parts.push(p);
+    return p;
+  },
+  async getNotifications() { return [...appData.notifications]; },
+  async saveNotification(n) { appData.notifications.unshift(n); return n; },
+  async getInvoices() { return [...appData.invoices]; },
+  async saveInvoice(inv) {
+    const idx = appData.invoices.findIndex(x => x.id === inv.id);
+    if (idx >= 0) appData.invoices[idx] = inv; else appData.invoices.unshift(inv);
+    return inv;
+  },
+  async getSettings() { return { ...appData.settings }; },
+  async saveSettings(s) { appData.settings = { ...appData.settings, ...s }; return appData.settings; },
+};
+
+// ── SEED DATA ──
+const appData = {
+  repairs: [
+    { id:'REP-2401', customer:'Sophie Müller', email:'sophie@example.com', phone:'+41 79 123 45 67', country:'CH', model:'Item A', color:'Cognac', repairType:'Hardware (screws / pins)', dropoff:'In-store', status:2, warranty:'valid', warrantyDate:'2023-10-15', notes:'Front clasp loose', workshop:'Workshop A', legs:[{dir:'out',carrier:'Post CH',trk:'CH123456789CH',status:'delivered'},{dir:'return',carrier:'Post CH',trk:'',status:'pending'}], createdAt:'2025-01-10', eta:'2025-01-17', goodwill:false, invoiced:false, price:80, cost:35 },
+    { id:'REP-2402', customer:'Lena Hoffmann', email:'lena@example.com', phone:'+49 89 555 0123', country:'DE', model:'Item B', color:'Black', repairType:'Zipper replacement', dropoff:'Sent in', status:3, warranty:'expired', warrantyDate:'2022-05-20', notes:'Main zipper broken', workshop:'Production Partner', legs:[{dir:'out',carrier:'DHL',trk:'1234567890',status:'in-transit'},{dir:'return',carrier:'DHL',trk:'',status:'pending'}], createdAt:'2025-01-08', eta:'2025-01-28', goodwill:false, invoiced:false, price:140, cost:65 },
+    { id:'REP-2403', customer:'Mia Keller', email:'mia@example.com', phone:'+41 44 333 22 11', country:'CH', model:'Item C', color:'Navy', repairType:'Lining repair', dropoff:'In-store', status:5, warranty:'valid', warrantyDate:'2024-03-01', notes:'Inner lining detached', workshop:'Production Partner', legs:[{dir:'out',carrier:'Post CH',trk:'CH987654321CH',status:'delivered'},{dir:'return',carrier:'Post CH',trk:'CH111222333CH',status:'in-transit'}], createdAt:'2025-01-05', eta:'2025-01-25', goodwill:false, invoiced:false, price:120, cost:55 },
+    { id:'REP-2404', customer:'Clara Bauer', email:'clara@example.com', phone:'+41 76 444 55 66', country:'CH', model:'Item D', color:'Taupe', repairType:'Strap exchange', dropoff:'In-store', status:1, warranty:'goodwill', warrantyDate:'2022-11-10', notes:'Customer requested goodwill — long-time client', workshop:'Workshop B', legs:[{dir:'out',carrier:'Post CH',trk:'',status:'pending'},{dir:'return',carrier:'Post CH',trk:'',status:'pending'}], createdAt:'2025-01-12', eta:'2025-01-16', goodwill:true, goodwillReason:'Long-term loyal customer, first repair request', invoiced:false, price:0, cost:25 },
+    { id:'REP-2405', customer:'Anna Schmidt', email:'anna@example.com', phone:'+49 30 222 3344', country:'DE', model:'Item A', color:'Bordeaux', repairType:'Self-repair — spare part', dropoff:'Sent in', status:4, warranty:'valid', warrantyDate:'2024-06-15', notes:'Customer replacing bottom feet', workshop:null, legs:[{dir:'out',carrier:'DHL',trk:'9876543210',status:'in-transit'}], createdAt:'2025-01-11', eta:'2025-01-14', goodwill:false, invoiced:false, price:15, cost:5 },
+    { id:'REP-2406', customer:'Julia Weber', email:'julia@example.com', phone:'+41 78 999 88 77', country:'CH', model:'Item E', color:'Forest', repairType:'Metal chain replacement', dropoff:'In-store', status:6, warranty:'expired', warrantyDate:'2021-09-01', notes:'Chain oxidised, full replacement', workshop:null, legs:[], createdAt:'2025-01-03', eta:'2025-01-10', goodwill:false, invoiced:true, price:180, cost:0 },
+  ],
+  parts: [
+    { id:'PT-001', name:'Brass Clasp Set', sku:'CL-BRASS-01', model:'Item A', stock:12, reorderAt:5, price:8.50, shopifyUrl:'#', active:true },
+    { id:'PT-002', name:'Nickel Screw Pack (4)', sku:'SC-NI-4PK', model:'All', stock:3, reorderAt:10, price:4.00, shopifyUrl:'#', active:true },
+    { id:'PT-003', name:'#5 YKK Zipper 30cm', sku:'ZP-YKK-30', model:'Item B', stock:0, reorderAt:5, price:6.50, shopifyUrl:'#', active:true },
+    { id:'PT-004', name:'Linen Lining Panel', sku:'LN-LINEN-A', model:'Item C', stock:7, reorderAt:3, price:12.00, shopifyUrl:'#', active:true },
+    { id:'PT-005', name:'Short Detach Strap 60cm', sku:'ST-DET-60', model:'Item D', stock:2, reorderAt:5, price:22.00, shopifyUrl:'#', active:true },
+    { id:'PT-006', name:'Bottom Feet Set (4)', sku:'FT-BOT-4PK', model:'Item A', stock:18, reorderAt:8, price:5.00, shopifyUrl:'#', active:true },
+    { id:'PT-007', name:'Gold Chain 42cm', sku:'CH-GOLD-42', model:'Item E', stock:0, reorderAt:3, price:35.00, shopifyUrl:'#', active:true },
+  ],
+  notifications: [
+    { id:'NTF-001', type:'customer', repair:'REP-2403', recipient:'mia@example.com', subject:'Your item is on its way back!', preview:'Hi Mia, great news — your repaired item has been shipped back...', sentAt:'2025-01-20 14:32', status:'sent' },
+    { id:'NTF-002', type:'workshop', repair:'REP-2402', recipient:'workshop@productionpartner.it', subject:'New item received — REP-2402', preview:'Hi team, a new item arrived for repair. Customer: Lena Hoffmann...', sentAt:'2025-01-09 09:15', status:'sent' },
+    { id:'NTF-003', type:'customer', repair:'REP-2401', recipient:'sophie@example.com', subject:'Your item has arrived at our workshop', preview:'Hi Sophie, your item has arrived safely at Workshop A...', sentAt:'2025-01-12 11:00', status:'sent' },
+  ],
+  invoices: [
+    { id:'INV-2025-01', partner:'Production Partner', period:'Jan 2025', repairs:['REP-2402'], totalCustomer:140, totalCost:65, margin:75, status:'unpaid', issuedAt:'2025-01-31' },
+    { id:'INV-2024-12', partner:'Production Partner', period:'Dec 2024', repairs:['REP-PREV-1','REP-PREV-2'], totalCustomer:480, totalCost:195, margin:285, status:'paid', issuedAt:'2024-12-31' },
+  ],
+  settings: {
+    brandName:'RepairFlow Demo',
+    logoUrl:'',
+    repairEmail:'repairs@yourbrand.com',
+    storeAddress:'Main Street 1, 8001 Zurich',
+    storeHours:'Mon–Fri 10–18, Sat 10–16',
+    website:'www.yourbrand.com',
+    warrantyYears:2,
+    goodwillDays:14,
+    currency:'CHF',
+    workshops:[
+      { id:'WS-A', name:'Workshop A', location:'Zurich, CH', contact:'Maria Kowalski', email:'ws-a@yourbrand.com', eta:2, active:true },
+      { id:'WS-B', name:'Workshop B', location:'Berlin, DE', contact:'Klaus Richter', email:'ws-b@yourbrand.com', eta:2, active:true },
+      { id:'WS-C', name:'Production Partner', location:'Northern Italy', contact:'Marco B.', email:'partner@productionpartner.it', eta:21, active:true },
+    ],
+    repairTypes:[
+      { id:'RT-01', name:'Hardware (screws / pins)', defaultWorkshop:'Workshop A', stitchingRequired:false, active:true },
+      { id:'RT-02', name:'Strap exchange (detachable)', defaultWorkshop:'Workshop A', stitchingRequired:false, active:true },
+      { id:'RT-03', name:'Zipper replacement', defaultWorkshop:'Production Partner', stitchingRequired:true, active:true },
+      { id:'RT-04', name:'Strap repair (stitching)', defaultWorkshop:'Production Partner', stitchingRequired:true, active:true },
+      { id:'RT-05', name:'Lining repair', defaultWorkshop:'Production Partner', stitchingRequired:true, active:true },
+      { id:'RT-06', name:'Leather damage', defaultWorkshop:'Production Partner', stitchingRequired:true, active:true },
+      { id:'RT-07', name:'Glow-up / conditioning', defaultWorkshop:'Production Partner', stitchingRequired:false, active:true },
+      { id:'RT-08', name:'Metal chain replacement', defaultWorkshop:'Direct', stitchingRequired:false, active:true },
+      { id:'RT-09', name:'Self-repair — spare part', defaultWorkshop:'Direct', stitchingRequired:false, active:true },
+      { id:'RT-10', name:'Full warranty inspection', defaultWorkshop:'Production Partner', stitchingRequired:false, active:true },
+    ],
+    products:[
+      { id:'PR-01', name:'Item A', variants:['Cognac','Black','Bordeaux'], active:true },
+      { id:'PR-02', name:'Item B', variants:['Black','Midnight'], active:true },
+      { id:'PR-03', name:'Item C', variants:['Navy','Forest','Camel'], active:true },
+      { id:'PR-04', name:'Item D', variants:['Taupe','Cognac'], active:true },
+      { id:'PR-05', name:'Item E', variants:['Black','Bordeaux'], active:true },
+    ],
+    triggerRules:{
+      workshopShipped: true, workshopArrived: true, workshopDone: true,
+      returnShipped: true, readyPickup: true, delayNotice: true,
+    },
+    emailTemplates:{
+      workshopShipped:{ subject:'Your {{model}} is on its way to our workshop', body:'Hi {{customer_first_name}},\n\nYour {{model}} has been shipped to {{workshop_name}} for {{repair_type}}.\n\nTracking: {{trk_link}}\n\nEstimated return: {{eta}}\n\nBest,\n{{brand_name}} Team' },
+      returnShipped:{ subject:'Your repaired {{model}} is on its way back!', body:'Hi {{customer_first_name}},\n\nGreat news — your {{model}} has been repaired and shipped back to you.\n\nTracking: {{trk_link}}\n\nPlease allow 2–3 business days for delivery.\n\nBest,\n{{brand_name}} Team' },
+      readyPickup:{ subject:'Your {{model}} is ready for pickup', body:'Hi {{customer_first_name}},\n\nYour repaired {{model}} is ready for collection at {{store_address}}.\n\nStore hours: {{store_hours}}\n\nPlease bring this email as reference: {{repair_id}}\n\nBest,\n{{brand_name}} Team' },
+      delayNotice:{ subject:'Update on your {{model}} repair — {{repair_id}}', body:'Hi {{customer_first_name}},\n\nWe wanted to keep you updated on your {{model}} repair ({{repair_id}}).\n\nUnfortunately there is a small delay: {{delay_reason}}\n\nWe expect your item back by {{new_eta}}. We apologise for the inconvenience.\n\nBest,\n{{brand_name}} Team' },
+    },
+    integrations:{ gmail:false, googleDrive:false, shopify:false, gorgias:false }
+  }
+};
+
+const STATUSES = ['Dropped in','OTW Workshop','At Workshop','OTW Back','Ready / Out for delivery','Picked up / Delivered','Exchanged'];
+const STATUS_PILLS = ['grey','amber','blue','amber','green','green','grey'];
+
+let currentUser = { name:'Alex Chen', role:'Admin', initials:'AC' };
+
+function uid(prefix) { return prefix + '-' + Date.now().toString(36).toUpperCase(); }
+function fmt(n, cur='CHF') { return cur + ' ' + Number(n).toFixed(0); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function daysBetween(a, b) { return Math.round((new Date(b)-new Date(a))/(1000*60*60*24)); }
+function checkWarranty(saleDate) {
+  if (!saleDate) return 'pending';
+  const yrs = appData.settings.warrantyYears;
+  const expiry = new Date(saleDate); expiry.setFullYear(expiry.getFullYear()+yrs);
+  return new Date() <= expiry ? 'valid' : 'expired';
+}
+function warrantyBadge(r) {
+  if (r.goodwill) return '<span class="pill green">✓ Goodwill</span>';
+  if (r.warranty==='valid') return '<span class="pill green">✓ In warranty</span>';
+  if (r.warranty==='expired') return '<span class="pill red">✗ Out of warranty</span>';
+  return '<span class="pill amber">⏳ Pending</span>';
+}
+</script>
+<script>
+// ── NAVIGATION ──
+const PAGES = {
+  dashboard:{ title:'Dashboard', sub:'Overview' },
+  repairs:{ title:'All Repairs', sub:'Service queue' },
+  newrepair:{ title:'New Repair', sub:'Intake form' },
+  parts:{ title:'Spare Parts', sub:'Inventory' },
+  invoices:{ title:'Partner Invoices', sub:'Finance' },
+  notifications:{ title:'Notifications', sub:'Communications' },
+  notiflog:{ title:'Notification Log', sub:'History' },
+  reports:{ title:'Reports', sub:'Insights & Export' },
+  admin:{ title:'Admin Settings', sub:'Configuration' },
+};
+
+let currentPage = 'dashboard';
+
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  currentPage = page;
+  document.getElementById('page-title').textContent = PAGES[page].title;
+  document.getElementById('page-sub').textContent = PAGES[page].sub;
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') === `goTo('${page}')`) n.classList.add('active');
+  });
+  // Lazy render
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'repairs') renderRepairs();
+  if (page === 'newrepair') initNewRepair();
+  if (page === 'parts') renderParts();
+  if (page === 'invoices') renderInvoices();
+  if (page === 'notifications') renderNotifications();
+  if (page === 'notiflog') renderNotifLog();
+  if (page === 'reports') renderReports();
+  if (page === 'admin') initAdmin();
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+
+// ── DASHBOARD ──
+function renderDashboard() {
+  const repairs = appData.repairs;
+  const open = repairs.filter(r => r.status < 5).length;
+  const ready = repairs.filter(r => r.status === 4).length;
+  const partsAlert = appData.parts.filter(p => p.stock <= p.reorderAt).length;
+  const unpaidInv = appData.invoices.filter(i => i.status === 'unpaid').length;
+
+  document.getElementById('dash-kpis').innerHTML = `
+    <div class="card kpi accent-kpi">
+      <div class="label">Open Repairs</div>
+      <div class="value">${open}</div>
+      <div class="sub">active in queue</div>
+    </div>
+    <div class="card kpi green-kpi" style="border-left:3px solid var(--accent)">
+      <div class="label">Ready for Pickup</div>
+      <div class="value">${ready}</div>
+      <div class="sub">awaiting collection</div>
+    </div>
+    <div class="card kpi amber-kpi">
+      <div class="label">Parts Alerts</div>
+      <div class="value">${partsAlert}</div>
+      <div class="sub">low or zero stock</div>
+    </div>
+    <div class="card kpi red-kpi">
+      <div class="label">Unpaid Partner Batches</div>
+      <div class="value">${unpaidInv}</div>
+      <div class="sub">pending invoice</div>
+    </div>`;
+
+  // Overdue
+  const now = new Date();
+  const overdue = repairs.filter(r => r.eta && new Date(r.eta) < now && r.status < 5);
+  document.getElementById('dash-overdue').innerHTML = overdue.length ? `
+    <table class="tbl"><thead><tr><th>ID</th><th>Customer</th><th>Model</th><th>ETA</th><th>Days Late</th></tr></thead><tbody>
+    ${overdue.map(r => `<tr><td><a href="#" onclick="openRepairDetail('${r.id}')" style="color:var(--accent);text-decoration:none">${r.id}</a></td><td>${r.customer}</td><td>${r.model}</td><td class="mono">${r.eta}</td><td class="pill red">${daysBetween(r.eta, today())}d</td></tr>`).join('')}
+    </tbody></table>` : `<div class="empty-state"><p>No overdue repairs 🎉</p></div>`;
+
+  // Stale pickups
+  const stale = repairs.filter(r => r.status === 4 && daysBetween(r.eta, today()) > 5);
+  document.getElementById('dash-stale').innerHTML = stale.length ? `
+    <table class="tbl"><thead><tr><th>ID</th><th>Customer</th><th>Model</th><th>ETA</th></tr></thead><tbody>
+    ${stale.map(r => `<tr><td><a href="#" onclick="openRepairDetail('${r.id}')" style="color:var(--accent);text-decoration:none">${r.id}</a></td><td>${r.customer}</td><td>${r.model}</td><td class="mono">${r.eta}</td></tr>`).join('')}
+    </tbody></table>` : `<div class="empty-state"><p>No stale pickups</p></div>`;
+
+  // Goodwill
+  const gw = repairs.filter(r => r.goodwill);
+  document.getElementById('dash-goodwill').innerHTML = gw.length ? `
+    <table class="tbl"><thead><tr><th>ID</th><th>Customer</th><th>Model</th><th>Reason</th></tr></thead><tbody>
+    ${gw.map(r => `<tr><td><a href="#" onclick="openRepairDetail('${r.id}')" style="color:var(--accent);text-decoration:none">${r.id}</a></td><td>${r.customer}</td><td>${r.model}</td><td style="font-size:12px;color:var(--text-2)">${r.goodwillReason||'—'}</td></tr>`).join('')}
+    </tbody></table>` : `<div class="empty-state"><p>No goodwill repairs</p></div>`;
+
+  // Parts alerts
+  const alerts = appData.parts.filter(p => p.stock <= p.reorderAt);
+  document.getElementById('dash-parts-alert').innerHTML = alerts.length ? `
+    <table class="tbl"><thead><tr><th>SKU</th><th>Name</th><th>Stock</th><th>Reorder At</th></tr></thead><tbody>
+    ${alerts.map(p => `<tr><td class="mono">${p.sku}</td><td>${p.name}</td><td><span class="pill ${p.stock===0?'red':'amber'}">${p.stock===0?'Out of stock':'Low: '+p.stock}</span></td><td class="mono">${p.reorderAt}</td></tr>`).join('')}
+    </tbody></table>` : `<div class="empty-state"><p>All parts stocked ✓</p></div>`;
+
+  // Model chart
+  const modelCounts = {};
+  repairs.forEach(r => { modelCounts[r.model] = (modelCounts[r.model]||0)+1; });
+  const maxM = Math.max(...Object.values(modelCounts), 1);
+  document.getElementById('dash-model-chart').innerHTML = `<div class="bar-chart">${
+    Object.entries(modelCounts).sort((a,b)=>b[1]-a[1]).map(([m,c])=>`
+      <div class="bar-row">
+        <div class="bar-label">${m}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/maxM*100)}%"></div></div>
+        <div class="bar-val">${c}</div>
+      </div>`).join('')
+  }</div>`;
+
+  // Workshop chart
+  const wsCounts = {};
+  repairs.forEach(r => { const ws = r.workshop||'Direct'; wsCounts[ws] = (wsCounts[ws]||0)+1; });
+  const maxW = Math.max(...Object.values(wsCounts), 1);
+  document.getElementById('dash-ws-chart').innerHTML = `<div class="bar-chart">${
+    Object.entries(wsCounts).map(([w,c],i)=>`
+      <div class="bar-row">
+        <div class="bar-label">${w}</div>
+        <div class="bar-track"><div class="bar-fill ${i===0?'':'blue'}" style="width:${Math.round(c/maxW*100)}%"></div></div>
+        <div class="bar-val">${c}</div>
+      </div>`).join('')
+  }</div>`;
+
+  updateNavBadges();
+}
+
+function updateNavBadges() {
+  const open = appData.repairs.filter(r => r.status < 5).length;
+  const partsAlert = appData.parts.filter(p => p.stock <= p.reorderAt).length;
+  const unpaidInv = appData.invoices.filter(i => i.status === 'unpaid').length;
+  document.getElementById('nav-badge-open').textContent = open;
+  document.getElementById('nav-badge-parts').textContent = partsAlert;
+  document.getElementById('nav-badge-inv').textContent = unpaidInv;
+  if (partsAlert === 0) document.getElementById('nav-badge-parts').style.display = 'none';
+  if (unpaidInv === 0) document.getElementById('nav-badge-inv').style.display = 'none';
+}
+
+// ── ALL REPAIRS ──
+function renderRepairs() {
+  const search = (document.getElementById('repairs-search')?.value||'').toLowerCase();
+  const statusF = document.getElementById('repairs-status-filter')?.value||'';
+  const wsF = document.getElementById('repairs-ws-filter')?.value||'';
+
+  // Populate filters once
+  const sf = document.getElementById('repairs-status-filter');
+  if (sf.children.length <= 1) {
+    STATUSES.forEach((s,i) => { const o = document.createElement('option'); o.value=String(i); o.textContent=s; sf.appendChild(o); });
+  }
+  const wf = document.getElementById('repairs-ws-filter');
+  if (wf.children.length <= 1) {
+    [...new Set(appData.repairs.map(r=>r.workshop||'Direct'))].forEach(w => { const o = document.createElement('option'); o.value=w; o.textContent=w; wf.appendChild(o); });
+  }
+
+  let filtered = appData.repairs;
+  if (search) filtered = filtered.filter(r => (r.id+r.customer+r.model+r.repairType).toLowerCase().includes(search));
+  if (statusF !== '') filtered = filtered.filter(r => String(r.status) === statusF);
+  if (wsF) filtered = filtered.filter(r => (r.workshop||'Direct') === wsF);
+
+  const tbody = document.getElementById('repairs-tbody');
+  tbody.innerHTML = filtered.map(r => {
+    const overdue = r.eta && new Date(r.eta) < new Date() && r.status < 5;
+    return `<tr>
+      <td><a href="#" onclick="openRepairDetail('${r.id}')" style="color:var(--accent);font-family:'DM Mono',monospace;font-size:12px;text-decoration:none;font-weight:500">${r.id}</a></td>
+      <td><div style="font-weight:500">${r.customer}</div><div style="font-size:11px;color:var(--text-3)">${r.email}</div></td>
+      <td>${r.model} <span style="font-size:11px;color:var(--text-3)">${r.color}</span></td>
+      <td style="font-size:12px">${r.repairType}</td>
+      <td><span class="chip">${r.workshop||'Direct'}</span></td>
+      <td><span class="pill ${STATUS_PILLS[r.status]}">${STATUSES[r.status]}</span></td>
+      <td>${warrantyBadge(r)}</td>
+      <td class="mono ${overdue?'red':''}">
+        ${r.eta||'—'} ${overdue?'<span class="pill red">Late</span>':''}
+      </td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="openRepairDetail('${r.id}')">View</button>
+        <button class="btn btn-ghost btn-sm" onclick="openTravellerForId('${r.id}')">Slip</button>
+      </td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-3)">No repairs found</td></tr>`;
+}
+</script>
+<script>
+// ── NEW REPAIR ──
+function initNewRepair() {
+  const s = appData.settings;
+  // Models
+  const modelSel = document.getElementById('nr-model');
+  modelSel.innerHTML = '<option value="">Select model…</option>';
+  s.products.filter(p=>p.active).forEach(p => {
+    const o = document.createElement('option'); o.value = p.name; o.textContent = p.name; modelSel.appendChild(o);
+  });
+  modelSel.onchange = () => {
+    const prod = s.products.find(p=>p.name===modelSel.value);
+    const colorSel = document.getElementById('nr-color');
+    colorSel.innerHTML = '<option value="">Select color…</option>';
+    if (prod) prod.variants.forEach(v => { const o = document.createElement('option'); o.value=v; o.textContent=v; colorSel.appendChild(o); });
+  };
+  // Repair types
+  const rtSel = document.getElementById('nr-reptype');
+  rtSel.innerHTML = '<option value="">Select repair type…</option>';
+  s.repairTypes.filter(r=>r.active).forEach(rt => {
+    const o = document.createElement('option'); o.value=rt.name; o.textContent=rt.name; rtSel.appendChild(o);
+  });
+}
+
+function updateWarranty() {
+  const saleDate = document.getElementById('nr-saledate').value;
+  const box = document.getElementById('nr-warranty-status');
+  if (!saleDate) { box.style.display='none'; return; }
+  const status = checkWarranty(saleDate);
+  const yrs = appData.settings.warrantyYears;
+  const expiry = new Date(saleDate); expiry.setFullYear(expiry.getFullYear()+yrs);
+  const diff = daysBetween(today(), expiry.toISOString().split('T')[0]);
+  if (status === 'valid') {
+    box.className = 'callout green'; box.style.display='flex';
+    box.textContent = `✓ In warranty — ${diff > 30 ? Math.floor(diff/30)+' months' : diff+' days'} remaining`;
+  } else {
+    box.className = 'callout red'; box.style.display='flex';
+    box.textContent = `✗ Out of warranty — expired ${Math.abs(diff)} days ago`;
+  }
+}
+
+function updateCarrier() {
+  const country = document.getElementById('nr-country').value;
+  const warn = document.getElementById('nr-customs-warning');
+  warn.style.display = ['UK','US','OTHER'].includes(country) ? 'flex' : 'none';
+  updateRouting();
+}
+
+function updateRouting() {
+  const rt = document.getElementById('nr-reptype').value;
+  const s = appData.settings;
+  const rtObj = s.repairTypes.find(r => r.name === rt);
+  const routingBody = document.getElementById('nr-routing-body');
+  const journeyBody = document.getElementById('nr-journey-body');
+  if (!rtObj) {
+    routingBody.innerHTML = '<div class="empty-state"><p>Select repair type to see routing</p></div>';
+    journeyBody.innerHTML = '<div class="empty-state"><p>Select repair type to build journey</p></div>';
+    return;
+  }
+  const ws = rtObj.defaultWorkshop;
+  routingBody.innerHTML = `
+    <div class="flex-center gap-12 mb-16">
+      <div style="text-align:center">
+        <div class="pill green" style="margin-bottom:4px">Your Store</div>
+        <div style="font-size:11px;color:var(--text-3)">Drop-off / Intake</div>
+      </div>
+      <div style="flex:1;height:2px;background:var(--accent)"></div>
+      <div style="text-align:center">
+        <div class="pill blue" style="margin-bottom:4px">${ws}</div>
+        <div style="font-size:11px;color:var(--text-3)">${ws==='Direct'?'Straight to customer':'Repair workshop'}</div>
+      </div>
+      ${ws !== 'Direct' ? `<div style="flex:1;height:2px;background:var(--accent)"></div><div style="text-align:center"><div class="pill green" style="margin-bottom:4px">Customer</div><div style="font-size:11px;color:var(--text-3)">Return delivery</div></div>` : ''}
+    </div>
+    ${rtObj.stitchingRequired ? '<div class="callout amber">✂ Stitching required — routed to Production Partner</div>' : ''}
+    <div style="font-size:12px;color:var(--text-2)">Workshop ETA: <strong>${s.workshops.find(w=>w.name===ws)?.eta||'N/A'} days</strong></div>`;
+
+  const country = document.getElementById('nr-country').value;
+  const carrierMap = { CH:'Post CH', DE:'DHL', AT:'DHL', FR:'La Poste / DHL', IT:'BRT / DHL', UK:'DHL Express', US:'FedEx', OTHER:'DHL' };
+  const carrier = carrierMap[country] || 'DHL';
+
+  if (rt === 'Self-repair — spare part' || ws === 'Direct') {
+    journeyBody.innerHTML = `
+      <div class="card" style="background:var(--surface2);border:1px solid var(--border);padding:12px;border-radius:var(--radius);margin-bottom:8px">
+        <div class="flex-between">
+          <div><span class="pill blue">→ Outbound</span> <span style="font-size:12px;margin-left:8px">Your store → Customer</span></div>
+          <span style="font-size:12px;color:var(--text-3)">Carrier: ${carrier}</span>
+        </div>
+        <div class="form-group mt-8"><label style="font-size:11px">Tracking Number (add when shipped)</label><input type="text" placeholder="TRK number" class="w-full" id="leg-out-trk" style="margin-top:4px"></div>
+      </div>
+      <div class="callout blue" style="font-size:12px">No return leg — part goes directly to customer</div>`;
+  } else {
+    journeyBody.innerHTML = `
+      <div class="card" style="background:var(--surface2);border:1px solid var(--border);padding:12px;border-radius:var(--radius);margin-bottom:8px">
+        <div class="flex-between">
+          <div><span class="pill blue">→ Outbound</span> <span style="font-size:12px;margin-left:8px">Your store → ${ws}</span></div>
+          <span style="font-size:12px;color:var(--text-3)">Carrier: ${carrier}</span>
+        </div>
+        <div class="form-group mt-8"><label style="font-size:11px">Tracking Number (add when shipped)</label><input type="text" placeholder="TRK number" id="leg-out-trk" style="margin-top:4px;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;width:100%"></div>
+      </div>
+      <div class="card" style="background:var(--surface2);border:1px solid var(--border);padding:12px;border-radius:var(--radius)">
+        <div class="flex-between">
+          <div><span class="pill green">← Return</span> <span style="font-size:12px;margin-left:8px">${ws} → Customer</span></div>
+          <span style="font-size:12px;color:var(--text-3)">Carrier: ${carrier}</span>
+        </div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:6px">Add return tracking when workshop ships back</div>
+      </div>`;
+  }
+}
+
+function saveNewRepair() {
+  const fname = document.getElementById('nr-fname').value.trim();
+  const lname = document.getElementById('nr-lname').value.trim();
+  const email = document.getElementById('nr-email').value.trim();
+  const rt = document.getElementById('nr-reptype').value;
+  if (!fname || !email || !rt) { alert('Please fill in: First Name, Email, and Repair Type'); return; }
+  const s = appData.settings;
+  const rtObj = s.repairTypes.find(r => r.name === rt);
+  const country = document.getElementById('nr-country').value;
+  const saleDate = document.getElementById('nr-saledate').value;
+  const ws = rtObj ? rtObj.defaultWorkshop : '';
+  const isSelfRepair = rt === 'Self-repair — spare part' || ws === 'Direct';
+  const legs = isSelfRepair
+    ? [{ dir:'out', carrier:'DHL', trk: document.getElementById('leg-out-trk')?.value||'', status:'pending' }]
+    : [{ dir:'out', carrier:'DHL', trk: document.getElementById('leg-out-trk')?.value||'', status:'pending' }, { dir:'return', carrier:'DHL', trk:'', status:'pending' }];
+  const eta = (() => {
+    const d = new Date(); const etaDays = s.workshops.find(w=>w.name===ws)?.eta||7;
+    d.setDate(d.getDate() + etaDays + 2); return d.toISOString().split('T')[0];
+  })();
+  const rep = {
+    id: 'REP-' + String(appData.repairs.length + 2500 + 1),
+    customer: fname + ' ' + lname,
+    email, phone: document.getElementById('nr-phone').value,
+    country, model: document.getElementById('nr-model').value,
+    color: document.getElementById('nr-color').value,
+    repairType: rt, dropoff: document.getElementById('nr-dropoff').value,
+    status: 0, warranty: saleDate ? checkWarranty(saleDate) : 'pending',
+    warrantyDate: saleDate, notes: document.getElementById('nr-notes').value,
+    workshop: ws === 'Direct' ? null : ws, legs, createdAt: today(), eta, goodwill: false,
+    invoiced: false, price: parseFloat(document.getElementById('nr-price').value)||0, cost: 0,
+  };
+  appData.repairs.unshift(rep);
+  alert(`Repair ${rep.id} created!`);
+  goTo('repairs');
+}
+
+// ── REPAIR DETAIL MODAL ──
+let activeRepairId = null;
+
+function openRepairDetail(id) {
+  const r = appData.repairs.find(x => x.id === id);
+  if (!r) return;
+  activeRepairId = id;
+  document.getElementById('rm-title').textContent = r.id + ' — ' + r.customer;
+  document.getElementById('rm-badges').innerHTML = `
+    ${warrantyBadge(r)}
+    <span class="pill ${STATUS_PILLS[r.status]}">${STATUSES[r.status]}</span>
+    <span class="chip">${r.workshop||'Direct'}</span>`;
+
+  // Pipeline
+  const steps = STATUSES;
+  const isSelf = !r.workshop;
+  const effectiveSteps = isSelf ? ['Dropped in','Shipped','Delivered','Done'] : steps;
+  const pipeEl = document.getElementById('rm-pipeline');
+  let html = '';
+  steps.forEach((s,i) => {
+    if (i > 0) html += `<div class="pipe-line ${i<=r.status?'done':''}"></div>`;
+    html += `<div class="pipe-step ${i<r.status?'done':i===r.status?'current':''}">
+      <div class="pipe-dot">${i<r.status?'✓':i+1}</div>
+      <div class="pipe-label">${s}</div>
+    </div>`;
+  });
+  pipeEl.innerHTML = html;
+
+  // Status selector
+  const sel = document.getElementById('rm-status-select');
+  sel.innerHTML = STATUSES.map((s,i) => `<option value="${i}" ${i===r.status?'selected':''}>${s}</option>`).join('');
+
+  // ETA / overdue
+  const overdue = r.eta && new Date(r.eta) < new Date() && r.status < 5;
+  document.getElementById('rm-delay-box').style.display = overdue ? 'block' : 'none';
+
+  // Customer info
+  document.getElementById('rm-customer').innerHTML = `
+    <div class="form-group mb-8"><label>Name</label><div style="font-size:13px">${r.customer}</div></div>
+    <div class="form-group mb-8"><label>Email</label><div style="font-size:13px">${r.email}</div></div>
+    <div class="form-group mb-8"><label>Phone</label><div style="font-size:13px">${r.phone||'—'}</div></div>
+    <div class="form-group"><label>Country</label><div style="font-size:13px">${r.country}</div></div>`;
+
+  // Item info
+  document.getElementById('rm-item').innerHTML = `
+    <div class="form-group mb-8"><label>Model / Color</label><div style="font-size:13px">${r.model} — ${r.color}</div></div>
+    <div class="form-group mb-8"><label>Repair Type</label><div style="font-size:13px">${r.repairType}</div></div>
+    <div class="form-group mb-8"><label>Drop-off</label><div style="font-size:13px">${r.dropoff}</div></div>
+    <div class="form-group mb-8"><label>ETA</label><div style="font-size:13px;font-family:'DM Mono',monospace">${r.eta||'—'}</div></div>
+    <div class="form-group mb-8"><label>Price</label><div style="font-size:13px;font-family:'DM Mono',monospace">${fmt(r.price)}</div></div>
+    <div class="form-group"><label>Notes</label><div style="font-size:13px;color:var(--text-2)">${r.notes||'—'}</div></div>`;
+
+  // Legs
+  const legs = r.legs || [];
+  document.getElementById('rm-legs').innerHTML = legs.length ? legs.map((leg,i) => `
+    <div class="card" style="background:var(--surface2);border:1px solid var(--border);padding:12px;border-radius:var(--radius);margin-bottom:8px">
+      <div class="flex-between mb-8">
+        <span class="pill ${leg.dir==='out'?'blue':'green'}">${leg.dir==='out'?'→ Outbound':'← Return'}</span>
+        <span style="font-size:12px;color:var(--text-2)">${leg.carrier||'—'}</span>
+        <span class="pill ${leg.status==='delivered'?'green':leg.status==='in-transit'?'amber':'grey'}">${leg.status||'pending'}</span>
+      </div>
+      <div class="flex-center gap-8">
+        <input type="text" value="${leg.trk||''}" placeholder="Tracking number" id="leg-trk-${i}"
+          style="flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-family:'DM Mono',monospace;font-size:12px">
+        <button class="btn btn-secondary btn-sm" onclick="saveLegTrk(${i})">Save</button>
+        ${leg.trk ? `<a href="https://www.dhl.com/en/express/tracking.html?AWB=${leg.trk}" target="_blank" class="btn btn-ghost btn-sm">Track ↗</a>` : ''}
+      </div>
+    </div>`).join('') : '<div style="font-size:13px;color:var(--text-3)">No shipment legs for this repair type (direct to customer)</div>';
+
+  // Goodwill
+  const gwSection = document.getElementById('rm-goodwill-section');
+  const gwBody = document.getElementById('rm-goodwill-body');
+  if (['Senior','Manager','Admin'].includes(currentUser.role)) {
+    gwSection.style.display = '';
+    if (r.goodwill) {
+      gwBody.innerHTML = `<div class="callout green">✦ Goodwill granted — Reason: <em>${r.goodwillReason||'Not specified'}</em></div>`;
+    } else {
+      gwBody.innerHTML = `<div class="flex-center gap-12">
+        <div style="font-size:13px;color:var(--text-2)">Not a goodwill repair.</div>
+        ${r.warranty === 'expired' ? `<button class="btn btn-secondary btn-sm" onclick="openGoodwill()">Grant Goodwill</button>` : ''}
+      </div>`;
+    }
+  } else {
+    gwSection.style.display = 'none';
+  }
+
+  openModal('repair-modal');
+}
+
+function saveLegTrk(idx) {
+  const r = appData.repairs.find(x => x.id === activeRepairId);
+  if (!r) return;
+  r.legs[idx].trk = document.getElementById(`leg-trk-${idx}`).value;
+  r.legs[idx].status = r.legs[idx].trk ? 'in-transit' : 'pending';
+  alert('Tracking number saved!');
+}
+
+function updateRepairStatus() {
+  const r = appData.repairs.find(x => x.id === activeRepairId);
+  if (!r) return;
+  r.status = parseInt(document.getElementById('rm-status-select').value);
+  openRepairDetail(activeRepairId); // re-render
+  updateNavBadges();
+}
+
+function openGoodwill() {
+  document.getElementById('goodwill-reason').value = '';
+  openModal('goodwill-modal');
+}
+
+function confirmGoodwill() {
+  const reason = document.getElementById('goodwill-reason').value.trim();
+  if (!reason) { alert('Please enter a reason for granting goodwill.'); return; }
+  const r = appData.repairs.find(x => x.id === activeRepairId);
+  r.goodwill = true; r.goodwillReason = reason; r.warranty = 'goodwill';
+  closeModal('goodwill-modal');
+  openRepairDetail(activeRepairId);
+}
+
+// ── TRAVELLER SLIP ──
+function openTraveller() { if (activeRepairId) openTravellerForId(activeRepairId); }
+
+function openTravellerForId(id) {
+  const r = appData.repairs.find(x => x.id === id);
+  if (!r) return;
+  const s = appData.settings;
+  const today_d = new Date().toLocaleDateString('en-GB');
+  const warrantyColor = r.goodwill ? '#2B4C3F' : r.warranty === 'valid' ? '#2B4C3F' : r.warranty === 'expired' ? '#B03A2E' : '#C4820A';
+  const warrantyLabel = r.goodwill ? 'COVERED BY YOUR BRAND' : r.warranty === 'valid' ? 'IN WARRANTY ✓' : r.warranty === 'expired' ? 'OUT OF WARRANTY ✗' : 'PENDING ASSESSMENT';
+
+  document.getElementById('traveller-body').innerHTML = `
+    <div style="font-family:'DM Sans',sans-serif;max-width:480px;margin:0 auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #1A1714">
+        <div>
+          <div style="font-family:'DM Serif Display',serif;font-size:22px;color:#1A1714">${s.brandName}</div>
+          <div style="font-size:11px;color:#9E9890;font-family:'DM Mono',monospace;letter-spacing:0.5px">REPAIR TRAVELLER</div>
+        </div>
+        <div style="text-align:right;font-family:'DM Mono',monospace;font-size:13px">
+          <div style="font-weight:600">${r.id}</div>
+          <div style="font-size:11px;color:#9E9890">${today_d}</div>
+        </div>
+      </div>
+      <div style="background:${warrantyColor};color:#fff;padding:8px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;text-align:center;margin-bottom:16px;letter-spacing:0.8px">
+        ${warrantyLabel}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div>
+          <div style="font-size:10px;color:#9E9890;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">Customer</div>
+          <div style="font-size:13px;font-weight:500">${r.customer}</div>
+          <div style="font-size:12px;color:#6B6560">${r.email}</div>
+          <div style="font-size:12px;color:#6B6560">${r.phone||''}</div>
+          <div style="font-size:12px;color:#6B6560">${r.country}</div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:#9E9890;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px">Item</div>
+          <div style="font-size:13px;font-weight:500">${r.model} — ${r.color}</div>
+          <div style="font-size:12px;color:#6B6560">${r.repairType}</div>
+          <div style="font-size:12px;color:#6B6560">Workshop: ${r.workshop||'Direct'}</div>
+          <div style="font-size:12px;color:#6B6560;font-family:'DM Mono',monospace">ETA: ${r.eta||'—'}</div>
+        </div>
+      </div>
+      <div style="background:#F5F2EE;border:1px solid #DDD9D2;border-radius:6px;padding:12px;margin-bottom:16px">
+        <div style="font-size:10px;color:#9E9890;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px">Notes</div>
+        <div style="font-size:13px;color:#1A1714">${r.notes||'No notes'}</div>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="font-size:10px;color:#9E9890;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px">Shipment Legs</div>
+        ${(r.legs||[]).map(leg=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #EAE7E1;font-size:12px">
+            <span style="color:#6B6560">${leg.dir==='out'?'→ Outbound':'← Return'}</span>
+            <span style="color:#6B6560">${leg.carrier||'—'}</span>
+            <span style="font-family:'DM Mono',monospace;color:#1A1714">${leg.trk||'TRK: pending'}</span>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid #DDD9D2;display:flex;align-items:flex-end;justify-content:space-between">
+        <div style="font-size:11px;color:#9E9890">${s.storeAddress}</div>
+        <div style="text-align:right">
+          <div style="font-size:10px;color:#9E9890;margin-bottom:20px">Received by</div>
+          <div style="width:120px;border-bottom:1px solid #DDD9D2"></div>
+        </div>
+      </div>
+    </div>`;
+  activeRepairId = id;
+  openModal('traveller-modal');
+}
+
+function printTraveller() { window.print(); }
+
+// ── DELAY NOTICE ──
+function openDelayNotice() {
+  document.getElementById('delay-reason').value = '';
+  document.getElementById('delay-new-eta').value = '';
+  openModal('delay-modal');
+}
+
+function sendDelayNotice() {
+  const reason = document.getElementById('delay-reason').value.trim();
+  const newEta = document.getElementById('delay-new-eta').value;
+  if (!reason) { alert('Please enter a reason for the delay.'); return; }
+  const r = appData.repairs.find(x => x.id === activeRepairId);
+  if (r && newEta) r.eta = newEta;
+  const n = { id: uid('NTF'), type:'customer', repair:activeRepairId, recipient:r.email, subject:`Update on your ${r.model} repair — ${r.id}`, preview:`Delay notice: ${reason}`, sentAt: new Date().toLocaleString(), status:'sent' };
+  appData.notifications.unshift(n);
+  closeModal('delay-modal');
+  closeModal('repair-modal');
+  alert('Delay notice sent!');
+}
+</script>
+<script>
+// ── SPARE PARTS ──
+function renderParts() {
+  const shopify = appData.settings.integrations.shopify;
+  document.getElementById('shopify-status-chip').innerHTML = shopify
+    ? '<span class="pill green">● Shopify live</span>'
+    : '<span class="pill grey">○ Manual mode</span>';
+
+  const search = (document.getElementById('parts-search')?.value||'').toLowerCase();
+  const parts = appData.parts.filter(p => !search || (p.name+p.sku+p.model).toLowerCase().includes(search));
+
+  const alerts = parts.filter(p => p.stock === 0);
+  const low = parts.filter(p => p.stock > 0 && p.stock <= p.reorderAt);
+  let alertHtml = '';
+  if (alerts.length) alertHtml += `<div class="callout red">⚠ ${alerts.length} part(s) out of stock: ${alerts.map(p=>p.name).join(', ')}</div>`;
+  if (low.length) alertHtml += `<div class="callout amber">⚡ ${low.length} part(s) running low</div>`;
+  document.getElementById('parts-alerts-row').innerHTML = alertHtml;
+
+  document.getElementById('parts-tbody').innerHTML = parts.map(p => `<tr>
+    <td class="mono">${p.sku}</td>
+    <td><div style="font-weight:500">${p.name}</div></td>
+    <td><span class="chip">${p.model}</span></td>
+    <td><span class="pill ${p.stock===0?'red':p.stock<=p.reorderAt?'amber':'green'}">${p.stock===0?'Out of stock':p.stock}</span></td>
+    <td class="mono">${p.reorderAt}</td>
+    <td class="mono">${fmt(p.price)}</td>
+    <td><span class="pill ${p.active?'green':'grey'}">${p.active?'Active':'Inactive'}</span></td>
+    <td><a href="${p.shopifyUrl}" target="_blank" class="btn btn-ghost btn-sm">View in Shop ↗</a></td>
+  </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-3)">No parts found</td></tr>';
+
+  updateNavBadges();
+}
+
+// ── INVOICES ──
+function renderInvoices() {
+  const el = document.getElementById('invoices-list');
+  el.innerHTML = appData.invoices.map(inv => `
+    <div class="card mb-16">
+      <div class="card-header flex-between">
+        <div>
+          <h3>${inv.id} — ${inv.partner} — ${inv.period}</h3>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px">Issued: ${inv.issuedAt}</div>
+        </div>
+        <div class="flex gap-8">
+          <span class="pill ${inv.status==='paid'?'green':'red'}">${inv.status}</span>
+          ${inv.status==='unpaid' ? `<button class="btn btn-primary btn-sm" onclick="markPaid('${inv.id}')">Mark Paid</button>` : ''}
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="grid3 mb-16">
+          <div><div class="text-xs muted mono" style="margin-bottom:3px">CUSTOMER TOTAL</div><div style="font-family:'DM Serif Display',serif;font-size:22px">${fmt(inv.totalCustomer)}</div></div>
+          <div><div class="text-xs muted mono" style="margin-bottom:3px">PARTNER COST</div><div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--red)">${fmt(inv.totalCost)}</div></div>
+          <div><div class="text-xs muted mono" style="margin-bottom:3px">MARGIN</div><div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent)">${fmt(inv.margin)}</div></div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:8px">Included Repairs</div>
+          <div class="flex gap-8 flex-wrap">
+            ${inv.repairs.map(rid => {
+              const r = appData.repairs.find(x=>x.id===rid);
+              return r ? `<div class="chip" style="cursor:pointer" onclick="openRepairDetail('${rid}')">${rid} — ${r.customer}</div>` : `<div class="chip">${rid}</div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`).join('') || '<div class="empty-state"><p>No invoices yet</p></div>';
+}
+
+function markPaid(id) {
+  const inv = appData.invoices.find(i=>i.id===id);
+  if (inv) { inv.status = 'paid'; renderInvoices(); updateNavBadges(); }
+}
+
+function openNewBatch() {
+  document.getElementById('batch-partner').value = 'Production Partner';
+  document.getElementById('batch-period').value = '';
+  const eligible = appData.repairs.filter(r => r.workshop === 'Production Partner' && !r.invoiced);
+  document.getElementById('batch-repairs-list').innerHTML = eligible.length ? eligible.map(r => `
+    <label style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid var(--border-light);cursor:pointer">
+      <input type="checkbox" value="${r.id}" name="batch-check"> 
+      <span class="mono" style="width:90px">${r.id}</span>
+      <span style="flex:1">${r.customer} — ${r.model}</span>
+      <span class="mono">${fmt(r.price)}</span>
+    </label>`).join('')
+    : '<div style="font-size:13px;color:var(--text-3);padding:12px">No eligible repairs (Production Partner, not yet invoiced)</div>';
+  openModal('batch-modal');
+}
+
+function confirmBatch() {
+  const partner = document.getElementById('batch-partner').value;
+  const period = document.getElementById('batch-period').value;
+  const checked = [...document.querySelectorAll('input[name="batch-check"]:checked')].map(c=>c.value);
+  if (!period) { alert('Please enter a period.'); return; }
+  if (!checked.length) { alert('Select at least one repair.'); return; }
+  const repairObjs = checked.map(id => appData.repairs.find(r=>r.id===id)).filter(Boolean);
+  const totalC = repairObjs.reduce((s,r)=>s+r.price,0);
+  const totalCost = repairObjs.reduce((s,r)=>s+r.cost,0);
+  repairObjs.forEach(r => r.invoiced = true);
+  const inv = { id: uid('INV'), partner, period, repairs:checked, totalCustomer:totalC, totalCost, margin:totalC-totalCost, status:'unpaid', issuedAt:today() };
+  appData.invoices.unshift(inv);
+  closeModal('batch-modal');
+  renderInvoices();
+  updateNavBadges();
+}
+
+// ── NOTIFICATIONS ──
+let notifPendingPayload = null;
+
+function notifTab(tab) {
+  document.querySelectorAll('#notif-tabs .tab').forEach((t,i) => t.classList.toggle('active', ['workshop','customer','delay'][i]===tab));
+  ['workshop','customer','delay'].forEach(p => {
+    document.getElementById(`notif-panel-${p}`).style.display = p===tab?'':'none';
+  });
+  if (tab === 'workshop') renderWorkshopTriggers();
+  if (tab === 'customer') renderCustomerTriggers();
+  if (tab === 'delay') renderDelayTriggers();
+}
+
+function renderWorkshopTriggers() {
+  const repairsInTransit = appData.repairs.filter(r => r.status >= 1 && r.status <= 3 && r.workshop);
+  const el = document.getElementById('ws-trigger-list');
+  el.innerHTML = repairsInTransit.length ? repairsInTransit.map(r => `
+    <div class="card mb-12">
+      <div class="card-header flex-between">
+        <div>
+          <span class="mono" style="font-weight:500">${r.id}</span>
+          <span style="margin-left:12px">${r.customer} — ${r.model}</span>
+        </div>
+        <span class="pill ${STATUS_PILLS[r.status]}">${STATUSES[r.status]}</span>
+      </div>
+      <div class="card-body">
+        <div class="flex gap-8 flex-wrap">
+          <button class="btn btn-secondary btn-sm" onclick="triggerNotif('${r.id}','workshopShipped','workshop')">Notify workshop: item shipped</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerNotif('${r.id}','workshopArrived','workshop')">Notify workshop: arrived</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerNotif('${r.id}','workshopDone','workshop')">Notify team: repair done</button>
+        </div>
+      </div>
+    </div>`).join('')
+    : '<div class="empty-state"><p>No repairs in transit</p></div>';
+}
+
+function renderCustomerTriggers() {
+  const eligible = appData.repairs.filter(r => r.status >= 1 && r.status <= 5);
+  const el = document.getElementById('cust-trigger-list');
+  el.innerHTML = eligible.length ? eligible.map(r => `
+    <div class="card mb-12">
+      <div class="card-header flex-between">
+        <div><span class="mono" style="font-weight:500">${r.id}</span><span style="margin-left:12px">${r.customer} — ${r.model}</span></div>
+        <span style="font-size:12px;color:var(--text-3)">${r.email}</span>
+      </div>
+      <div class="card-body">
+        <div class="flex gap-8 flex-wrap">
+          <button class="btn btn-secondary btn-sm" onclick="triggerNotif('${r.id}','returnShipped','customer')">Item shipped back to customer</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerNotif('${r.id}','readyPickup','customer')">Ready for pickup</button>
+        </div>
+      </div>
+    </div>`).join('')
+    : '<div class="empty-state"><p>No active repairs</p></div>';
+}
+
+function renderDelayTriggers() {
+  const now = new Date();
+  const overdue = appData.repairs.filter(r => r.eta && new Date(r.eta) < now && r.status < 5);
+  const el = document.getElementById('delay-list');
+  el.innerHTML = overdue.length ? overdue.map(r => `
+    <div class="card mb-12">
+      <div class="card-header flex-between">
+        <div><span class="mono" style="font-weight:500">${r.id}</span><span style="margin-left:12px">${r.customer} — ${r.model}</span></div>
+        <span class="pill red">Late ${daysBetween(r.eta, today())}d</span>
+      </div>
+      <div class="card-body">
+        <button class="btn btn-danger btn-sm" onclick="openRepairDetail('${r.id}');setTimeout(openDelayNotice,300)">Send Delay Notice</button>
+      </div>
+    </div>`).join('')
+    : '<div class="empty-state"><p>No overdue repairs 🎉</p></div>';
+}
+
+function triggerNotif(repairId, type, channel) {
+  const r = appData.repairs.find(x=>x.id===repairId);
+  if (!r) return;
+  const s = appData.settings;
+  const tpl = s.emailTemplates[type] || s.emailTemplates.workshopShipped;
+  const vars = {
+    customer_first_name: r.customer.split(' ')[0],
+    model: r.model, repair_id: r.id, workshop_name: r.workshop||'',
+    repair_type: r.repairType, trk_link: (r.legs[0]?.trk)||'(pending)',
+    eta: r.eta||'TBD', store_address: s.storeAddress, store_hours: s.storeHours,
+    brand_name: s.brandName
+  };
+  let subject = tpl.subject, body = tpl.body;
+  Object.entries(vars).forEach(([k,v]) => { subject = subject.replaceAll(`{{${k}}}`,v); body = body.replaceAll(`{{${k}}}`,v); });
+
+  const recipient = channel === 'customer' ? r.email : (s.workshops.find(w=>w.name===r.workshop)?.email||s.repairEmail);
+  document.getElementById('np-to').value = recipient;
+  document.getElementById('np-subject').value = subject;
+  document.getElementById('np-body').value = body;
+  const needsTrk = type === 'returnShipped';
+  document.getElementById('np-trk-row').style.display = needsTrk ? '' : 'none';
+  notifPendingPayload = { repairId, type, channel, recipient };
+  openModal('notif-preview-modal');
+}
+
+function confirmSendNotif() {
+  if (!notifPendingPayload) return;
+  const { repairId, type, channel, recipient } = notifPendingPayload;
+  const trk = document.getElementById('np-trk').value;
+  if (type === 'returnShipped' && trk) {
+    const r = appData.repairs.find(x=>x.id===repairId);
+    const retLeg = r?.legs?.find(l=>l.dir==='return');
+    if (retLeg) { retLeg.trk = trk; retLeg.status = 'in-transit'; }
+  }
+  const n = { id: uid('NTF'), type:channel, repair:repairId, recipient, subject: document.getElementById('np-subject').value, preview: document.getElementById('np-body').value.slice(0,80)+'…', sentAt: new Date().toLocaleString(), status:'sent' };
+  appData.notifications.unshift(n);
+  closeModal('notif-preview-modal');
+  alert(`Notification sent to ${recipient}`);
+  notifPendingPayload = null;
+}
+
+// ── NOTIFICATION LOG ──
+function renderNotifLog() {
+  const search = (document.getElementById('log-search')?.value||'').toLowerCase();
+  const log = appData.notifications.filter(n => !search || (n.repair+n.recipient+n.subject).toLowerCase().includes(search));
+  document.getElementById('notiflog-tbody').innerHTML = log.map(n => `<tr>
+    <td class="mono">${n.id}</td>
+    <td><span class="pill ${n.type==='customer'?'blue':'green'}">${n.type}</span></td>
+    <td><a href="#" onclick="openRepairDetail('${n.repair}')" style="color:var(--accent);text-decoration:none;font-family:'DM Mono',monospace;font-size:12px">${n.repair}</a></td>
+    <td style="font-size:12px">${n.recipient}</td>
+    <td style="font-size:12px;color:var(--text-2)">${n.subject}</td>
+    <td class="mono" style="font-size:11px">${n.sentAt}</td>
+    <td><span class="pill green">${n.status}</span></td>
+    <td><button class="btn btn-ghost btn-sm" onclick="previewSentNotif('${n.id}')">View</button></td>
+  </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-3)">No notifications sent yet</td></tr>';
+}
+
+function previewSentNotif(id) {
+  const n = appData.notifications.find(x=>x.id===id);
+  if (!n) return;
+  document.getElementById('np-to').value = n.recipient;
+  document.getElementById('np-subject').value = n.subject;
+  document.getElementById('np-body').value = n.preview;
+  document.getElementById('np-trk-row').style.display = 'none';
+  notifPendingPayload = null;
+  openModal('notif-preview-modal');
+}
+</script>
+<script>
+// ── REPORTS ──
+function getRepairsInPeriod() {
+  const period = document.getElementById('rpt-period')?.value || 'all';
+  const now = new Date();
+  return appData.repairs.filter(r => {
+    if (period === 'all') return true;
+    const d = new Date(r.createdAt);
+    if (period === 'month') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    if (period === 'lastmonth') {
+      const lm = new Date(now.getFullYear(), now.getMonth()-1, 1);
+      return d.getMonth() === lm.getMonth() && d.getFullYear() === lm.getFullYear();
+    }
+    if (period === 'year') return d.getFullYear() === now.getFullYear();
+    return true;
+  });
+}
+
+function renderReports() {
+  const repairs = getRepairsInPeriod();
+  const total = repairs.length;
+  const revenue = repairs.reduce((s,r)=>s+r.price,0);
+  const cost = repairs.reduce((s,r)=>s+r.cost,0);
+  const margin = revenue - cost;
+  const completed = repairs.filter(r=>r.status>=5);
+  const avgDays = completed.length ? Math.round(completed.reduce((s,r)=>{
+    return s + (r.createdAt ? daysBetween(r.createdAt, today()) : 0);
+  },0)/completed.length) : '—';
+
+  document.getElementById('rpt-kpis').innerHTML = `
+    <div class="card kpi accent-kpi"><div class="label">Total Repairs</div><div class="value">${total}</div><div class="sub">in period</div></div>
+    <div class="card kpi blue-kpi"><div class="label">Revenue</div><div class="value">${fmt(revenue)}</div><div class="sub">customer total</div></div>
+    <div class="card kpi red-kpi"><div class="label">Partner Cost</div><div class="value">${fmt(cost)}</div><div class="sub">production partner</div></div>
+    <div class="card kpi amber-kpi"><div class="label">Margin</div><div class="value">${fmt(margin)}</div><div class="sub">net revenue</div></div>`;
+
+  // Revenue breakdown chart
+  const warrantyCount = repairs.filter(r=>r.warranty==='valid'&&!r.goodwill).length;
+  const paidCount = repairs.filter(r=>r.warranty==='expired'&&!r.goodwill).length;
+  const goodwillCount = repairs.filter(r=>r.goodwill).length;
+  const maxBar = Math.max(warrantyCount, paidCount, goodwillCount, 1);
+  document.getElementById('rpt-breakdown-chart').innerHTML = `<div class="bar-chart">
+    <div class="bar-row"><div class="bar-label">In Warranty</div><div class="bar-track"><div class="bar-fill" style="width:${warrantyCount/maxBar*100}%"></div></div><div class="bar-val">${warrantyCount}</div></div>
+    <div class="bar-row"><div class="bar-label">Paid (OOW)</div><div class="bar-track"><div class="bar-fill blue" style="width:${paidCount/maxBar*100}%"></div></div><div class="bar-val">${paidCount}</div></div>
+    <div class="bar-row"><div class="bar-label">Goodwill</div><div class="bar-track"><div class="bar-fill amber" style="width:${goodwillCount/maxBar*100}%"></div></div><div class="bar-val">${goodwillCount}</div></div>
+  </div>`;
+
+  // Model chart
+  const modelC = {};
+  repairs.forEach(r => { modelC[r.model]=(modelC[r.model]||0)+1; });
+  const maxM = Math.max(...Object.values(modelC),1);
+  document.getElementById('rpt-model-chart').innerHTML = `<div class="bar-chart">${
+    Object.entries(modelC).sort((a,b)=>b[1]-a[1]).map(([m,c])=>`
+      <div class="bar-row">
+        <div class="bar-label">${m}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${c/maxM*100}%"></div></div>
+        <div class="bar-val">${c}</div>
+      </div>`).join('')
+  }</div>`;
+
+  // Goodwill log
+  const gw = repairs.filter(r=>r.goodwill);
+  document.getElementById('rpt-goodwill-count').textContent = gw.length;
+  document.getElementById('rpt-goodwill-list').innerHTML = gw.length ? `
+    <table class="tbl"><thead><tr><th>ID</th><th>Customer</th><th>Model</th><th>Reason</th><th>Date</th></tr></thead><tbody>
+    ${gw.map(r=>`<tr><td class="mono">${r.id}</td><td>${r.customer}</td><td>${r.model}</td><td style="font-size:12px;color:var(--text-2)">${r.goodwillReason||'—'}</td><td class="mono">${r.createdAt}</td></tr>`).join('')}
+    </tbody></table>` : '<div style="padding:16px;font-size:13px;color:var(--text-3)">No goodwill repairs in this period</div>';
+
+  // Full table
+  document.getElementById('rpt-table-tbody').innerHTML = repairs.map(r => `<tr>
+    <td class="mono">${r.id}</td>
+    <td>${r.customer}</td>
+    <td>${r.model}</td>
+    <td style="font-size:12px">${r.repairType}</td>
+    <td><span class="chip">${r.workshop||'Direct'}</span></td>
+    <td>${warrantyBadge(r)}</td>
+    <td class="mono">${fmt(r.price)}</td>
+    <td class="mono">${fmt(r.cost)}</td>
+    <td class="mono" style="color:var(--accent)">${fmt(r.price-r.cost)}</td>
+    <td><span class="pill ${STATUS_PILLS[r.status]}">${STATUSES[r.status]}</span></td>
+  </tr>`).join('') || '<tr><td colspan="10" style="text-align:center;padding:24px;color:var(--text-3)">No repairs in this period</td></tr>';
+}
+
+function exportReportCSV() {
+  const repairs = getRepairsInPeriod();
+  const rows = [
+    ['ID','Customer','Email','Model','Color','Repair Type','Workshop','Warranty','Status','Price','Cost','Margin','Created','ETA'],
+    ...repairs.map(r => [r.id,r.customer,r.email,r.model,r.color,r.repairType,r.workshop||'Direct',r.warranty,STATUSES[r.status],r.price,r.cost,r.price-r.cost,r.createdAt,r.eta||''])
+  ];
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type:'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `repairs-report-${today()}.csv`; a.click();
+}
+
+function exportReportPDF() {
+  const repairs = getRepairsInPeriod();
+  const revenue = repairs.reduce((s,r)=>s+r.price,0);
+  const cost = repairs.reduce((s,r)=>s+r.cost,0);
+  const s = appData.settings;
+  const html = `<!DOCTYPE html><html><head><style>
+    body{font-family:sans-serif;padding:40px;color:#1A1714;font-size:13px}
+    h1{font-size:22px;margin-bottom:4px} .sub{color:#9E9890;font-size:11px;margin-bottom:24px}
+    .kpis{display:flex;gap:24px;margin-bottom:24px}
+    .kpi{flex:1;border:1px solid #DDD9D2;border-radius:6px;padding:12px}
+    .kpi .label{font-size:10px;text-transform:uppercase;color:#9E9890;margin-bottom:4px}
+    .kpi .val{font-size:22px}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{background:#F5F2EE;padding:8px;text-align:left;font-size:10px;text-transform:uppercase;color:#9E9890;border-bottom:1px solid #DDD9D2}
+    td{padding:8px;border-bottom:1px solid #F0EDE8}
+    .footer{margin-top:40px;font-size:11px;color:#9E9890;text-align:right}
+  </style></head><body>
+    <h1>${s.brandName} — Repairs Report</h1>
+    <div class="sub">Generated: ${new Date().toLocaleDateString('en-GB')} · Period: ${document.getElementById('rpt-period').options[document.getElementById('rpt-period').selectedIndex].text}</div>
+    <div class="kpis">
+      <div class="kpi"><div class="label">Total Repairs</div><div class="val">${repairs.length}</div></div>
+      <div class="kpi"><div class="label">Revenue</div><div class="val">${fmt(revenue)}</div></div>
+      <div class="kpi"><div class="label">Partner Cost</div><div class="val">${fmt(cost)}</div></div>
+      <div class="kpi"><div class="label">Margin</div><div class="val">${fmt(revenue-cost)}</div></div>
+    </div>
+    <table><thead><tr><th>ID</th><th>Customer</th><th>Model</th><th>Repair Type</th><th>Status</th><th>Price</th><th>Cost</th><th>Margin</th></tr></thead><tbody>
+    ${repairs.map(r=>`<tr><td>${r.id}</td><td>${r.customer}</td><td>${r.model}</td><td>${r.repairType}</td><td>${STATUSES[r.status]}</td><td>${fmt(r.price)}</td><td>${fmt(r.cost)}</td><td>${fmt(r.price-r.cost)}</td></tr>`).join('')}
+    </tbody></table>
+    <div class="footer">${s.brandName} · ${s.storeAddress} · ${s.website}</div>
+  </body></html>`;
+  const win = window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(()=>win.print(),500);
+}
+</script>
+<script>
+// ── ADMIN ──
+function adminTab(tab) {
+  document.querySelectorAll('#admin-tabs .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('[id^="admin-panel-"]').forEach(p => p.style.display='none');
+  const tabs = ['brand','workshops','routing','triggers','templates','parts-admin','catalogue','reptypes','users','integrations'];
+  const idx = tabs.indexOf(tab);
+  document.querySelectorAll('#admin-tabs .tab')[idx].classList.add('active');
+  document.getElementById('admin-panel-'+tab).style.display = '';
+  if (tab==='workshops') renderWsAdmin();
+  if (tab==='routing') renderRouting();
+  if (tab==='triggers') loadTriggers();
+  if (tab==='templates') renderTemplates();
+  if (tab==='parts-admin') renderPartsAdmin();
+  if (tab==='catalogue') renderCatalogue();
+  if (tab==='reptypes') renderRepTypes();
+  if (tab==='users') renderUsers();
+  if (tab==='integrations') renderIntegrations();
+}
+
+function initAdmin() {
+  const s = appData.settings;
+  document.getElementById('s-brand').value = s.brandName;
+  document.getElementById('s-email').value = s.repairEmail;
+  document.getElementById('s-address').value = s.storeAddress;
+  document.getElementById('s-hours').value = s.storeHours;
+  document.getElementById('s-web').value = s.website;
+  document.getElementById('s-warranty').value = s.warrantyYears;
+  document.getElementById('s-goodwill').value = s.goodwillDays;
+}
+
+function saveConfig() {
+  const s = appData.settings;
+  s.brandName = document.getElementById('s-brand').value;
+  s.repairEmail = document.getElementById('s-email').value;
+  s.storeAddress = document.getElementById('s-address').value;
+  s.storeHours = document.getElementById('s-hours').value;
+  s.website = document.getElementById('s-web').value;
+  s.warrantyYears = parseInt(document.getElementById('s-warranty').value);
+  s.goodwillDays = parseInt(document.getElementById('s-goodwill').value);
+  alert('Configuration saved!');
+}
+
+function previewLogo(input) {
+  const file = input.files[0]; if (!file) return;
+  if (file.size > 2*1024*1024) { alert('File too large. Max 2MB.'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('logo-preview').innerHTML = `<img src="${e.target.result}" style="max-height:60px;max-width:180px;object-fit:contain">`;
+    appData.settings.logoUrl = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// WORKSHOPS ADMIN
+function renderWsAdmin() {
+  document.getElementById('ws-admin-tbody').innerHTML = appData.settings.workshops.map((w,i) => `<tr>
+    <td><input class="inline-edit" value="${w.name}" onchange="appData.settings.workshops[${i}].name=this.value"></td>
+    <td><input class="inline-edit" value="${w.location}" onchange="appData.settings.workshops[${i}].location=this.value"></td>
+    <td><input class="inline-edit" value="${w.contact}" onchange="appData.settings.workshops[${i}].contact=this.value"></td>
+    <td><input class="inline-edit" value="${w.email}" onchange="appData.settings.workshops[${i}].email=this.value"></td>
+    <td><input class="inline-edit" type="number" value="${w.eta}" style="width:60px" onchange="appData.settings.workshops[${i}].eta=parseInt(this.value)"></td>
+    <td><label class="toggle"><input type="checkbox" ${w.active?'checked':''} onchange="appData.settings.workshops[${i}].active=this.checked"><span class="toggle-slider"></span></label></td>
+    <td><button class="btn btn-danger btn-sm" onclick="removeWorkshop(${i})">Remove</button></td>
+  </tr>`).join('');
+}
+
+function addWorkshop() {
+  appData.settings.workshops.push({ id:uid('WS'), name:'New Workshop', location:'', contact:'', email:'', eta:7, active:true });
+  renderWsAdmin();
+}
+function removeWorkshop(i) {
+  if (confirm('Remove this workshop?')) { appData.settings.workshops.splice(i,1); renderWsAdmin(); }
+}
+function saveWorkshops() { alert('Workshops saved!'); }
+
+// ROUTING
+function renderRouting() {
+  const wsNames = appData.settings.workshops.map(w=>w.name).concat(['Direct']);
+  document.getElementById('routing-tbody').innerHTML = appData.settings.repairTypes.map((rt,i) => `<tr>
+    <td><input class="inline-edit" value="${rt.name}" onchange="appData.settings.repairTypes[${i}].name=this.value"></td>
+    <td><select class="inline-edit" onchange="appData.settings.repairTypes[${i}].defaultWorkshop=this.value">
+      ${wsNames.map(w=>`<option value="${w}" ${rt.defaultWorkshop===w?'selected':''}>${w}</option>`).join('')}
+    </select></td>
+    <td><label class="toggle"><input type="checkbox" ${rt.stitchingRequired?'checked':''} onchange="appData.settings.repairTypes[${i}].stitchingRequired=this.checked"><span class="toggle-slider"></span></label></td>
+    <td><label class="toggle"><input type="checkbox" ${rt.active?'checked':''} onchange="appData.settings.repairTypes[${i}].active=this.checked"><span class="toggle-slider"></span></label></td>
+  </tr>`).join('');
+}
+function saveRouting() { alert('Routing saved!'); }
+
+// TRIGGERS
+function loadTriggers() {
+  const tr = appData.settings.triggerRules;
+  Object.keys(tr).forEach(k => {
+    const el = document.getElementById('tr-'+k);
+    if (el) el.checked = tr[k];
+  });
+}
+function saveTriggers() {
+  const tr = appData.settings.triggerRules;
+  Object.keys(tr).forEach(k => {
+    const el = document.getElementById('tr-'+k);
+    if (el) tr[k] = el.checked;
+  });
+  alert('Trigger rules saved!');
+}
+
+// EMAIL TEMPLATES
+function renderTemplates() {
+  const tpl = appData.settings.emailTemplates;
+  const labels = { workshopShipped:'Item shipped to workshop', returnShipped:'Item shipped back to customer', readyPickup:'Ready for pickup', delayNotice:'Delay notice' };
+  document.getElementById('templates-list').innerHTML = Object.keys(tpl).map(k => `
+    <div class="card mb-16">
+      <div class="card-header"><h3>${labels[k]||k}</h3></div>
+      <div class="card-body">
+        <div class="form-group mb-12"><label>Subject</label>
+          <input type="text" id="tpl-subj-${k}" value="${tpl[k].subject}">
+        </div>
+        <div class="form-group"><label>Body</label>
+          <textarea id="tpl-body-${k}" style="min-height:120px">${tpl[k].body}</textarea>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function saveTemplates() {
+  const tpl = appData.settings.emailTemplates;
+  Object.keys(tpl).forEach(k => {
+    const subj = document.getElementById('tpl-subj-'+k);
+    const body = document.getElementById('tpl-body-'+k);
+    if (subj) tpl[k].subject = subj.value;
+    if (body) tpl[k].body = body.value;
+  });
+  alert('Templates saved!');
+}
+
+// SPARE PARTS ADMIN
+function renderPartsAdmin() {
+  document.getElementById('parts-admin-tbody').innerHTML = appData.parts.map((p,i) => `<tr>
+    <td><input class="inline-edit" value="${p.sku}" onchange="appData.parts[${i}].sku=this.value"></td>
+    <td><input class="inline-edit" value="${p.name}" onchange="appData.parts[${i}].name=this.value"></td>
+    <td><input class="inline-edit" value="${p.model}" onchange="appData.parts[${i}].model=this.value"></td>
+    <td><input class="inline-edit" type="number" value="${p.stock}" style="width:70px" onchange="appData.parts[${i}].stock=parseInt(this.value)"></td>
+    <td><input class="inline-edit" type="number" value="${p.reorderAt}" style="width:70px" onchange="appData.parts[${i}].reorderAt=parseInt(this.value)"></td>
+    <td><input class="inline-edit" type="number" value="${p.price}" style="width:80px" onchange="appData.parts[${i}].price=parseFloat(this.value)"></td>
+    <td><label class="toggle"><input type="checkbox" ${p.active?'checked':''} onchange="appData.parts[${i}].active=this.checked"><span class="toggle-slider"></span></label></td>
+    <td><button class="btn btn-danger btn-sm" onclick="removePart(${i})">Remove</button></td>
+  </tr>`).join('');
+}
+function addPart() {
+  appData.parts.push({ id:uid('PT'), name:'New Part', sku:'SKU-NEW', model:'All', stock:0, reorderAt:5, price:0, shopifyUrl:'#', active:true });
+  renderPartsAdmin();
+}
+function removePart(i) { if (confirm('Remove this part?')) { appData.parts.splice(i,1); renderPartsAdmin(); } }
+function importPartsCSV(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const lines = e.target.result.split('\n').slice(1).filter(l=>l.trim());
+    lines.forEach(line => {
+      const [sku,name,model,stock,reorderAt,price] = line.split(',').map(c=>c.replace(/"/g,'').trim());
+      if (sku && name) appData.parts.push({ id:uid('PT'), sku, name, model:model||'All', stock:parseInt(stock)||0, reorderAt:parseInt(reorderAt)||5, price:parseFloat(price)||0, shopifyUrl:'#', active:true });
+    });
+    renderPartsAdmin();
+    alert(`Imported ${lines.length} parts`);
+  };
+  reader.readAsText(file);
+}
+function exportPartsCSV() {
+  const rows = [['sku','name','model','stock','reorder_at','price'], ...appData.parts.map(p=>[p.sku,p.name,p.model,p.stock,p.reorderAt,p.price])];
+  const csv = rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'spare-parts.csv'; a.click();
+}
+function exportPartsPDF() {
+  const parts = appData.parts;
+  const html = `<!DOCTYPE html><html><head><style>body{font-family:sans-serif;padding:32px;font-size:12px}h1{font-size:18px;margin-bottom:16px}table{width:100%;border-collapse:collapse}th{background:#F5F2EE;padding:8px;text-align:left;font-size:10px;text-transform:uppercase;color:#9E9890;border-bottom:1px solid #DDD9D2}td{padding:8px;border-bottom:1px solid #F0EDE8}.low{color:#C4820A;font-weight:600}.zero{color:#B03A2E;font-weight:600}</style></head><body>
+    <h1>Spare Parts Inventory</h1>
+    <table><thead><tr><th>SKU</th><th>Name</th><th>Model</th><th>In Stock</th><th>Reorder At</th><th>Price</th></tr></thead><tbody>
+    ${parts.map(p=>`<tr><td>${p.sku}</td><td>${p.name}</td><td>${p.model}</td><td class="${p.stock===0?'zero':p.stock<=p.reorderAt?'low':''}">${p.stock===0?'OUT OF STOCK':p.stock}</td><td>${p.reorderAt}</td><td>${fmt(p.price)}</td></tr>`).join('')}
+    </tbody></table></body></html>`;
+  const win = window.open('','_blank'); win.document.write(html); win.document.close(); setTimeout(()=>win.print(),400);
+}
+
+// PRODUCT CATALOGUE
+function renderCatalogue() {
+  document.getElementById('catalogue-tbody').innerHTML = appData.settings.products.map((p,i) => `<tr>
+    <td><input class="inline-edit" value="${p.name}" onchange="appData.settings.products[${i}].name=this.value"></td>
+    <td><input class="inline-edit" value="${p.variants.join(', ')}" onchange="appData.settings.products[${i}].variants=this.value.split(',').map(v=>v.trim())" style="width:100%"></td>
+    <td><label class="toggle"><input type="checkbox" ${p.active?'checked':''} onchange="appData.settings.products[${i}].active=this.checked"><span class="toggle-slider"></span></label></td>
+    <td><button class="btn btn-danger btn-sm" onclick="removeProduct(${i})">Remove</button></td>
+  </tr>`).join('');
+}
+function addProduct() {
+  appData.settings.products.push({ id:uid('PR'), name:'New Model', variants:['Default'], active:true });
+  renderCatalogue();
+}
+function removeProduct(i) { if (confirm('Remove?')) { appData.settings.products.splice(i,1); renderCatalogue(); } }
+function importCatalogueCSV(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const lines = e.target.result.split('\n').slice(1).filter(l=>l.trim());
+    lines.forEach(line => {
+      const [name, variants] = line.split(',').map(c=>c.replace(/"/g,'').trim());
+      if (name) appData.settings.products.push({ id:uid('PR'), name, variants: variants?variants.split('|').map(v=>v.trim()):[], active:true });
+    });
+    renderCatalogue();
+  };
+  reader.readAsText(file);
+}
+function exportCatalogueCSV() {
+  const rows = [['name','variants'], ...appData.settings.products.map(p=>[p.name, p.variants.join('|')])];
+  const csv = rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'product-catalogue.csv'; a.click();
+}
+
+// REPAIR TYPES
+function renderRepTypes() {
+  const wsNames = appData.settings.workshops.map(w=>w.name).concat(['Direct']);
+  document.getElementById('reptypes-tbody').innerHTML = appData.settings.repairTypes.map((rt,i) => `<tr>
+    <td><input class="inline-edit" value="${rt.name}" onchange="appData.settings.repairTypes[${i}].name=this.value"></td>
+    <td><select class="inline-edit" onchange="appData.settings.repairTypes[${i}].defaultWorkshop=this.value">
+      ${wsNames.map(w=>`<option value="${w}" ${rt.defaultWorkshop===w?'selected':''}>${w}</option>`).join('')}
+    </select></td>
+    <td><label class="toggle"><input type="checkbox" ${rt.stitchingRequired?'checked':''} onchange="appData.settings.repairTypes[${i}].stitchingRequired=this.checked"><span class="toggle-slider"></span></label></td>
+    <td><label class="toggle"><input type="checkbox" ${rt.active?'checked':''} onchange="appData.settings.repairTypes[${i}].active=this.checked"><span class="toggle-slider"></span></label></td>
+    <td><button class="btn btn-danger btn-sm" onclick="removeRepType(${i})">Remove</button></td>
+  </tr>`).join('');
+}
+function addRepType() {
+  appData.settings.repairTypes.push({ id:uid('RT'), name:'New Repair Type', defaultWorkshop:'Workshop A', stitchingRequired:false, active:true });
+  renderRepTypes();
+}
+function removeRepType(i) { if (confirm('Remove?')) { appData.settings.repairTypes.splice(i,1); renderRepTypes(); } }
+function exportRepTypesCSV() {
+  const rows = [['name','default_workshop','stitching_required'], ...appData.settings.repairTypes.map(r=>[r.name,r.defaultWorkshop,r.stitchingRequired])];
+  const csv = rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'repair-types.csv'; a.click();
+}
+
+// USERS
+const demoUsers = [
+  { name:'Alex Chen', email:'alex@yourbrand.com', role:'Admin', status:'Active' },
+  { name:'Maria K.', email:'maria@yourbrand.com', role:'Senior', status:'Active' },
+  { name:'Klaus R.', email:'workshop-b@yourbrand.com', role:'Staff', status:'Active' },
+  { name:'Sara W.', email:'sara@yourbrand.com', role:'Manager', status:'Active' },
+];
+function renderUsers() {
+  document.getElementById('users-tbody').innerHTML = demoUsers.map((u,i) => `<tr>
+    <td style="font-weight:500">${u.name}</td>
+    <td style="font-size:12px">${u.email}</td>
+    <td><select onchange="demoUsers[${i}].role=this.value" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;background:var(--surface)">
+      ${['Staff','Senior','Manager','Admin'].map(r=>`<option ${u.role===r?'selected':''}>${r}</option>`).join('')}
+    </select></td>
+    <td><span class="pill green">${u.status}</span></td>
+    <td><button class="btn btn-danger btn-sm" onclick="if(confirm('Remove?')){demoUsers.splice(${i},1);renderUsers()}">Remove</button></td>
+  </tr>`).join('');
+}
+function inviteUser() { openModal('invite-modal'); }
+function confirmInvite() {
+  const name = document.getElementById('inv-name').value.trim();
+  const email = document.getElementById('inv-email').value.trim();
+  const role = document.getElementById('inv-role').value;
+  if (!name || !email) { alert('Please fill in name and email.'); return; }
+  demoUsers.push({ name, email, role, status:'Invited' });
+  renderUsers();
+  closeModal('invite-modal');
+  alert(`Invite sent to ${email}`);
+}
+
+// INTEGRATIONS
+function renderIntegrations() {
+  const int = appData.settings.integrations;
+  ['gmail','gdrive','shopify','gorgias'].forEach(k => {
+    const key = k === 'gdrive' ? 'googleDrive' : k;
+    const btn = document.getElementById('btn-'+k);
+    if (btn) {
+      btn.textContent = int[key] ? 'Disconnect' : 'Connect';
+      btn.className = int[key] ? 'btn btn-danger btn-sm' : 'btn btn-secondary btn-sm';
+    }
+  });
+}
+function toggleIntegration(key) {
+  appData.settings.integrations[key] = !appData.settings.integrations[key];
+  renderIntegrations();
+  const uiKey = key === 'googleDrive' ? 'gdrive' : key;
+  alert(appData.settings.integrations[key] ? `${key} connected (demo)` : `${key} disconnected`);
+}
+</script>
+<script>
+// ── BOOT ──
+document.addEventListener("DOMContentLoaded", () => {
+  renderDashboard();
+  updateNavBadges();
+  notifTab("workshop");
+});
+</script>
+</body></html>
