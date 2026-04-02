@@ -49,6 +49,10 @@
   .proj-desc { font-size: 0.82rem; color: var(--bark); line-height: 1.65; margin-bottom: 1rem; }
   .proj-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
   .proj-tag { font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 2px; background: var(--foam); color: var(--bark); font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+
+  .proj-demo { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--tide); text-decoration: none; border: 1px solid rgba(74,140,111,0.3); padding: 0.35rem 0.8rem; border-radius: 3px; transition: background 0.2s, color 0.2s; }
+  .proj-demo:hover { background: var(--tide); color: white; }
+
   .proj-arrow { position: absolute; bottom: 1.2rem; right: 1.2rem; color: var(--tide); font-size: 0.9rem; opacity: 0; transition: opacity 0.2s, transform 0.2s; }
   .hero-proj-card:hover .proj-arrow { opacity: 1; transform: translateX(3px); }
   .stats-strip { background: var(--deep); padding: 2.5rem 5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
@@ -96,6 +100,40 @@
   .footer-copy { font-size: 0.75rem; color: rgba(245,239,224,0.25); }
   .footer-email { font-size: 0.82rem; color: var(--tide); text-decoration: none; font-family: 'Space Grotesk', sans-serif; }
   .footer-email:hover { color: var(--sun); }
+
+
+  .contact-section { background: var(--deep); padding: 6rem 5rem; }
+  .contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
+  .contact-left .section-tag::before { background: var(--sun); }
+  .contact-sub { color: rgba(245,239,224,0.6); font-size: 0.95rem; line-height: 1.8; margin-top: 1rem; margin-bottom: 2rem; }
+  .contact-promises { display: flex; flex-direction: column; gap: 0.7rem; }
+  .cp { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 500; color: rgba(245,239,224,0.7); display: flex; align-items: center; gap: 0.5rem; }
+  .contact-right { background: white; border-radius: 8px; padding: 2.5rem; }
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--bark); letter-spacing: 0.04em; text-transform: uppercase; }
+  .form-group input, .form-group select, .form-group textarea { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--deep); background: var(--sand); border: 1px solid rgba(42,59,46,0.15); border-radius: 4px; padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; width: 100%; resize: vertical; }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(61,79,69,0.4); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--tide); }
+  .form-submit { background: var(--deep); color: var(--sand); font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600; padding: 0.95rem 2rem; border: none; border-radius: 4px; cursor: pointer; transition: background 0.2s, transform 0.15s; text-align: center; }
+  .form-submit:hover { background: var(--tide); transform: translateY(-1px); }
+  @media (max-width: 900px) { .contact-section { padding: 4rem 1.5rem; } .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; } .form-row { grid-template-columns: 1fr; } .contact-right { padding: 1.5rem; } }
+
+
+  .reviews { background: var(--sand); padding: 6rem 5rem; }
+  .reviews-inner { max-width: 1100px; margin: 0 auto; }
+  .reviews-header { max-width: 520px; margin-bottom: 3.5rem; }
+  .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .review-card { background: white; border-radius: 6px; padding: 2rem; border: 1px solid rgba(42,59,46,0.1); position: relative; }
+  .review-stars { color: var(--sun); font-size: 0.9rem; margin-bottom: 1.2rem; letter-spacing: 0.1em; }
+  .review-text { font-size: 0.9rem; color: var(--bark); line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; }
+  .review-author { border-top: 1px solid rgba(42,59,46,0.08); padding-top: 1rem; }
+  .review-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.85rem; color: var(--deep); }
+  .review-role { font-size: 0.75rem; color: var(--tide); font-weight: 500; margin-top: 0.15rem; }
+  .review-app { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(61,79,69,0.35); margin-top: 0.3rem; font-family: 'Space Grotesk', sans-serif; }
+  .review-quote { position: absolute; top: 1.2rem; right: 1.5rem; font-size: 3.5rem; color: var(--foam); font-family: Georgia, serif; line-height: 1; pointer-events: none; }
+  @media (max-width: 900px) { .reviews { padding: 4rem 1.5rem; } .reviews-grid { grid-template-columns: 1fr; } }
 
   .guarantee { background: white; padding: 4rem 5rem; }
   .guarantee-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 2.5rem; align-items: flex-start; background: var(--foam); border-radius: 8px; padding: 2.5rem; border: 1px solid rgba(74,140,111,0.2); }
@@ -156,21 +194,21 @@
       <div class="proj-title">Repair Job Tracker</div>
       <div class="proj-desc">End-to-end repair management — intake, status updates, technician assignment, and customer communication in one system.</div>
       <div class="proj-tags"><span class="proj-tag">Job Tracking</span><span class="proj-tag">Operations</span><span class="proj-tag">Status Updates</span></div>
-      <span class="proj-arrow">→</span>
+      <a href="/repair_demo.html" class="proj-demo" target="_blank" onclick="event.stopPropagation()">View Demo →</a>
     </a>
     <a href="#why" class="hero-proj-card p2">
       <div class="proj-label">F&B Business</div>
       <div class="proj-title">Point of Sale System</div>
       <div class="proj-desc">Full POS replacing paper orders and a cash drawer. Orders, tables, and daily revenue reporting in one clean screen.</div>
       <div class="proj-tags"><span class="proj-tag">POS</span><span class="proj-tag">Revenue Tracking</span><span class="proj-tag">Table Management</span></div>
-      <span class="proj-arrow">→</span>
+      <a href="/pos_demo.html" class="proj-demo" target="_blank" onclick="event.stopPropagation()">View Demo →</a>
     </a>
     <a href="#why" class="hero-proj-card p3">
       <div class="proj-label">F&B Business</div>
       <div class="proj-title">Recipe & Cost Manager</div>
       <div class="proj-desc">Internal app to manage recipes, calculate ingredient costs, and keep the kitchen aligned with their actual workflow.</div>
       <div class="proj-tags"><span class="proj-tag">Recipe Management</span><span class="proj-tag">Cost Control</span><span class="proj-tag">Kitchen Ops</span></div>
-      <span class="proj-arrow">→</span>
+      <a href="/recipe_demo.html" class="proj-demo" target="_blank" onclick="event.stopPropagation()">View Demo →</a>
     </a>
   </div>
 </section>
@@ -205,8 +243,8 @@
       <div class="founder-block">
         <div class="founder-label">From the founder</div>
         <div class="founder-quote">"I spent over 10 years in business operations and management before I ever wrote a line of code. I taught myself to build because I kept running into the same problem: the tools didn't fit the way real businesses actually work. So I built them myself. Now I build them for you."</div>
-        <div class="founder-name">Ali K.</div>
-        <div class="founder-role">Founder, Beachdog Solutions</div>
+        <div class="founder-name">— Founder, Beachdog Solutions</div>
+        
       </div>
     </div>
     <div class="why-points">
@@ -214,6 +252,51 @@
       <div class="why-point"><div class="why-icon">⚡</div><div class="why-point-text"><h4>Speed that makes sense</h4><p>Apps in days or weeks. Not a 6-month project with a 3-month delay and a spec document nobody reads.</p></div></div>
       <div class="why-point"><div class="why-icon">💰</div><div class="why-point-text"><h4>Price that doesn't hurt</h4><p>Roughly a third of what a traditional agency charges. No account managers, no overhead — just the work.</p></div></div>
       <div class="why-point"><div class="why-icon">🎯</div><div class="why-point-text"><h4>Fit that actually works</h4><p>Every app solves a real operational problem. Not a technical spec — the actual thing that's costing you time and money.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="reviews">
+  <div class="reviews-inner">
+    <div class="reviews-header">
+      <div class="section-tag">Client feedback</div>
+      <h2>What our clients say</h2>
+    </div>
+    <div class="reviews-grid">
+
+      <div class="review-card">
+        <div class="review-quote">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"This is saving me hours and hours of work every month. The accounting tab, the staff management, and the built-in transaction tracker have completely changed how I run my business."</p>
+        <div class="review-author">
+          <div class="review-name">Restaurant Owner</div>
+          <div class="review-role">Bali, Indonesia</div>
+          <div class="review-app">Point of Sale System</div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-quote">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Having all my recipes, ingredients and costs in one place has made a real difference. I can see exactly what each dish costs, keep everything up to date, and share it with my kitchen team instantly."</p>
+        <div class="review-author">
+          <div class="review-name">Restaurant Owner</div>
+          <div class="review-role">Hong Kong</div>
+          <div class="review-app">Recipe & Cost Manager</div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-quote">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The repair tracker has made our day-to-day operations so much easier. Before this, jobs were constantly getting lost or sent to the wrong workshop. Now everything is in one place — I get alerts when a repair is taking too long, and I can see all costs and invoices at a glance. The best part is that we can manage it ourselves and update the settings whenever we need to."</p>
+        <div class="review-author">
+          <div class="review-name">Operations Manager</div>
+          <div class="review-role">Germany</div>
+          <div class="review-app">Repair Job Tracker</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
