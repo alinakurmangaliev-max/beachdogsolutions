@@ -3,408 +3,836 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="google-site-verification" content="Uckgf7m5IDWzDjsywDgzOVq2JPc1jI_feY90s7FqKK8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beachdog Solutions — Custom Apps for SMEs</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="description" content="Beachdog Solutions builds fully custom apps for small and mid-size businesses. We adopt your workflows, eliminate manual work, and deliver in days — not months. 3× cheaper than agencies.">
+<meta name="keywords" content="custom app development, SME software, workflow automation, business app, custom software, small business app, operations automation, app development Hong Kong">
+<meta name="author" content="Beachdog Solutions">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://beachdogsolutions.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://beachdogsolutions.com/">
+<meta property="og:title" content="Beachdog Solutions — Custom Apps for SMEs">
+<meta property="og:description" content="We build fully custom apps around the way your business actually works. Delivered in days, not months. At a third of the cost.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Beachdog Solutions — Custom Apps for SMEs">
+<meta name="twitter:description" content="We build fully custom apps around the way your business actually works. Delivered in days, not months. At a third of the cost.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Beachdog Solutions",
+  "url": "https://beachdogsolutions.com",
+  "email": "info@beachdogsolutions.com",
+  "description": "Custom app development for small and mid-size businesses.",
+  "address": {"@type": "PostalAddress", "addressCountry": "HK"},
+  "sameAs": ["https://linkedin.com/company/beachdogsolutions"]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0F1117;
-    --bg2: #161B22;
-    --bg3: #1C2333;
-    --surface: #1E2433;
-    --border: rgba(255,255,255,0.08);
-    --text: #F0F2F5;
-    --text2: rgba(240,242,245,0.6);
-    --text3: rgba(240,242,245,0.35);
-    --green: #3D9970;
-    --green-light: #4DB885;
-    --green-dim: rgba(61,153,112,0.15);
-    --green-border: rgba(61,153,112,0.25);
-    --white: #FFFFFF;
-    /* Legacy mappings */
-    --sand: #F0F2F5;
-    --deep: #0F1117;
-    --bark: rgba(240,242,245,0.6);
-    --tide: #3D9970;
-    --sun: #3D9970;
-    --foam: #1E2433;
-  }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5rem; background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-  .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text); text-decoration: none; }
-  .nav-logo span { color: var(--tide); }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
-  .nav-links a { font-size: 0.82rem; font-weight: 500; color: var(--text2); text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--tide); }
-  .nav-cta { background: var(--green) !important; color: white !important; padding: 0.55rem 1.4rem !important; border-radius: 3px; }
-  .nav-cta:hover { background: var(--green-light) !important; color: white !important; }
-  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 5rem 4rem; position: relative; overflow: hidden; }
-  .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 60% 80% at 75% 50%, rgba(61,153,112,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 15% 80%, rgba(61,153,112,0.05) 0%, transparent 60%); }
-  .hero-grid { position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 60px 60px; }
-  .hero-top { position: relative; z-index: 1; max-width: 700px; margin-bottom: 3.5rem; }
-  .hero-tag { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tide); margin-bottom: 2rem; font-family: 'Space Grotesk', sans-serif; }
-  .hero-tag::before { content: ''; width: 28px; height: 2px; background: var(--tide); }
-  h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.8rem, 5vw, 5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; color: var(--text); margin-bottom: 1.6rem; }
-  h1 .accent { color: var(--tide); }
-  h1 .lined { position: relative; display: inline-block; }
-  h1 .lined::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 3px; background: var(--green); border-radius: 2px; }
-  .hero-sub { font-size: 1rem; line-height: 1.75; color: var(--text2); max-width: 520px; margin-bottom: 2.5rem; }
-  .hero-sub strong { font-weight: 600; color: var(--text); }
-  .hero-actions { display: flex; gap: 1.2rem; align-items: center; }
-  .btn-primary { background: var(--green); color: white; padding: 0.85rem 1.8rem; font-size: 0.875rem; font-weight: 500; font-family: 'Space Grotesk', sans-serif; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; display: inline-block; }
-  .btn-primary:hover { background: var(--green-light); transform: translateY(-1px); }
-  .btn-ghost { color: var(--text2); font-size: 0.875rem; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
-  .btn-ghost:hover { color: var(--tide); }
-  .btn-ghost::after { content: '→'; }
-  .hero-cards { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
-  .hero-proj-card { background: var(--surface); border-radius: 6px; padding: 1.5rem; border: 1px solid var(--border); text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; display: block; }
-  .hero-proj-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(14,26,20,0.1); }
-  .hero-proj-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-  .hero-proj-card.p1::before { background: var(--tide); }
-  .hero-proj-card.p2::before { background: var(--sun); }
-  .hero-proj-card.p3::before { background: rgba(74,140,111,0.35); }
-  .proj-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); font-weight: 600; margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif; }
-  .proj-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; color: var(--text); margin-bottom: 0.6rem; letter-spacing: -0.01em; }
-  .proj-desc { font-size: 0.82rem; color: var(--text2); line-height: 1.65; margin-bottom: 1rem; }
-  .proj-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-  .proj-tag { font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 2px; background: var(--green-dim); color: var(--green-light); font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .proj-demo { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--green); text-decoration: none; border: 1px solid var(--green-border); padding: 0.35rem 0.8rem; border-radius: 3px; transition: background 0.2s, color 0.2s; }
-  .proj-demo:hover { background: var(--green); color: white; }
-  .proj-demo-request { display: inline-block; margin-top: 1rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--text3); border: 1px solid var(--border); padding: 0.25rem 0.7rem; border-radius: 3px; letter-spacing: 0.04em; }
+:root {
+  --bg: #080C10;
+  --bg2: #0D1117;
+  --bg3: #131920;
+  --surface: #161C24;
+  --surface2: #1C2430;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --text: #EEF2F7;
+  --text2: rgba(238,242,247,0.55);
+  --text3: rgba(238,242,247,0.3);
+  --green: #22C55E;
+  --green2: #16A34A;
+  --green-dim: rgba(34,197,94,0.1);
+  --green-border: rgba(34,197,94,0.2);
+  --glow: rgba(34,197,94,0.15);
+}
 
-  .proj-arrow { position: absolute; bottom: 1.2rem; right: 1.2rem; color: var(--tide); font-size: 0.9rem; opacity: 0; transition: opacity 0.2s, transform 0.2s; }
-  .hero-proj-card:hover .proj-arrow { opacity: 1; transform: translateX(3px); }
-  .stats-strip { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 2.5rem 5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
-  .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 2.6rem; font-weight: 700; color: var(--green-light); line-height: 1; letter-spacing: -0.02em; }
-  .stat-desc { font-size: 0.82rem; color: var(--text3); margin-top: 0.4rem; }
-  section { padding: 6rem 5rem; }
-  .section-tag { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; font-family: 'Space Grotesk', sans-serif; }
-  .section-tag::before { content: ''; width: 20px; height: 2px; background: var(--green); }
-  h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(1.9rem, 3.2vw, 2.8rem); letter-spacing: -0.025em; line-height: 1.1; color: var(--text); margin-bottom: 1rem; }
-  .how { background: var(--bg2); }
-  .how-inner { max-width: 1100px; margin: 0 auto; }
-  .how-header { max-width: 520px; margin-bottom: 4rem; }
-  .how-header p { font-size: 0.95rem; color: var(--text2); line-height: 1.75; margin-top: 0.8rem; }
-  .how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
-  .step { position: relative; }
-  .step-num { font-family: 'Space Grotesk', sans-serif; font-size: 3.5rem; font-weight: 700; color: rgba(61,153,112,0.15); line-height: 1; margin-bottom: 1rem; letter-spacing: -0.03em; }
-  .step-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 0.6rem; color: var(--text); }
-  .step-desc { font-size: 0.875rem; color: var(--text2); line-height: 1.75; }
-  .step-arrow { position: absolute; top: 1.8rem; right: -1.5rem; color: var(--tide); opacity: 0.2; font-size: 1.4rem; }
-  .why { background: var(--bg2); }
-  .why-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
-  .why h2 { color: var(--text); }
-  .why .section-tag { color: var(--green); }
-  .why .section-tag::before { background: var(--green); }
-  .why-sub { color: var(--text2); font-size: 0.95rem; line-height: 1.8; margin-top: 1rem; }
-  .founder-block { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 1.8rem; margin-top: 2rem; }
-  .founder-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green); font-weight: 600; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif; }
-  .founder-quote { font-size: 0.92rem; color: var(--text2); line-height: 1.8; font-style: italic; }
-  .founder-name { margin-top: 1.2rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.85rem; color: var(--text); }
-  .founder-role { font-size: 0.75rem; color: var(--text3); margin-top: 0.2rem; }
-  .why-points { display: flex; flex-direction: column; gap: 1.6rem; }
-  .why-point { display: flex; gap: 1.2rem; align-items: flex-start; }
-  .why-icon { width: 38px; height: 38px; border-radius: 4px; background: var(--green-dim); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; border: 1px solid var(--green-border); }
-  .why-point-text h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
-  .why-point-text p { font-size: 0.845rem; color: var(--text2); line-height: 1.7; }
-  .cta-section { background: var(--green); padding: 6rem 5rem; text-align: center; }
-  .cta-section h2 { color: white; margin-bottom: 1rem; }
-  .cta-section p { color: rgba(255,255,255,0.75); font-size: 0.95rem; max-width: 460px; margin: 0 auto 2.5rem; line-height: 1.75; }
-  .btn-white { background: var(--bg); color: var(--text); padding: 0.95rem 2.4rem; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; display: inline-block; transition: transform 0.15s, box-shadow 0.2s; font-family: 'Space Grotesk', sans-serif; }
-  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
-  .cta-note { display: block; margin-top: 1.2rem; color: rgba(255,255,255,0.5); font-size: 0.8rem; }
-  footer { background: var(--bg2); padding: 2.5rem 5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
-  .footer-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--text); font-size: 0.95rem; }
-  .footer-logo span { color: var(--tide); }
-  .footer-copy { font-size: 0.75rem; color: var(--text3); }
-  .footer-email { font-size: 0.82rem; color: var(--green); text-decoration: none; font-family: 'Space Grotesk', sans-serif; }
-  .footer-email:hover { color: var(--green-light); }
+html { scroll-behavior: smooth; }
 
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
 
-  .contact-section { background: var(--bg); padding: 6rem 5rem; border-top: 1px solid var(--border); }
-  .contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
-  .contact-left .section-tag::before { background: var(--sun); }
-  .contact-sub { color: rgba(245,239,224,0.6); font-size: 0.95rem; line-height: 1.8; margin-top: 1rem; margin-bottom: 2rem; }
-  .contact-promises { display: flex; flex-direction: column; gap: 0.7rem; }
-  .cp { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--text2); display: flex; align-items: center; gap: 0.5rem; }
-  .contact-right { background: var(--surface); border-radius: 8px; padding: 2.5rem; border: 1px solid var(--border); }
-  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-group label { font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--text2); letter-spacing: 0.04em; text-transform: uppercase; }
-  .form-group input, .form-group select, .form-group textarea { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--text); background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; width: 100%; resize: vertical; }
-  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--text3); }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--green); }
-  .form-submit { background: var(--green); color: white; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600; padding: 0.95rem 2rem; border: none; border-radius: 4px; cursor: pointer; transition: background 0.2s, transform 0.15s; text-align: center; }
-  .form-submit:hover { background: var(--green-light); transform: translateY(-1px); }
-  @media (max-width: 900px) { .contact-section { padding: 4rem 1.5rem; } .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; } .form-row { grid-template-columns: 1fr; } .contact-right { padding: 1.5rem; } }
+/* SCROLL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
 
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 5rem; height: 68px;
+  background: rgba(8,12,16,0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.nav-logo {
+  font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--text); text-decoration: none;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.nav-logo-dot { color: var(--green); }
+.nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+.nav-links a {
+  font-size: 0.82rem; font-weight: 500; color: var(--text2);
+  text-decoration: none; letter-spacing: 0.04em;
+  transition: color 0.2s; padding: 0.3rem 0;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px; background: var(--green);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  background: var(--green) !important; color: #000 !important;
+  padding: 0.5rem 1.2rem; border-radius: 6px;
+  font-weight: 600 !important; font-size: 0.82rem !important;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
+  box-shadow: 0 0 0 0 var(--glow);
+}
+.nav-cta::after { display: none !important; }
+.nav-cta:hover {
+  background: #16C955 !important; color: #000 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 20px var(--glow) !important;
+}
 
-  .reviews { background: var(--bg); padding: 6rem 5rem; }
-  .reviews-inner { max-width: 1100px; margin: 0 auto; }
-  .reviews-header { max-width: 520px; margin-bottom: 3.5rem; }
-  .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  .review-card { background: var(--surface); border-radius: 6px; padding: 2rem; border: 1px solid var(--border); position: relative; }
-  .review-stars { color: #F5A623; font-size: 0.9rem; margin-bottom: 1.2rem; letter-spacing: 0.1em; }
-  .review-text { font-size: 0.9rem; color: var(--text2); line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; }
-  .review-author { border-top: 1px solid var(--border); padding-top: 1rem; }
-  .review-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.85rem; color: var(--text); }
-  .review-role { font-size: 0.75rem; color: var(--green); font-weight: 500; margin-top: 0.15rem; }
-  .review-app { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(61,79,69,0.35); margin-top: 0.3rem; font-family: 'Space Grotesk', sans-serif; }
-  .review-quote { position: absolute; top: 1.2rem; right: 1.5rem; font-size: 3.5rem; color: var(--bg3); font-family: Georgia, serif; line-height: 1; pointer-events: none; }
-  @media (max-width: 900px) { .reviews { padding: 4rem 1.5rem; } .reviews-grid { grid-template-columns: 1fr; } }
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8rem 5rem 5rem;
+  position: relative; overflow: hidden;
+}
+.hero-noise {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4; pointer-events: none;
+}
+.hero-glow {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 70% 40%, rgba(34,197,94,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 20% 70%, rgba(34,197,94,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 80% 80%, rgba(34,197,94,0.03) 0%, transparent 50%);
+}
+.hero-grid {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+}
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
 
-  .guarantee { background: var(--bg2); padding: 4rem 5rem; border-top: 1px solid var(--border); }
-  .guarantee-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 2.5rem; align-items: flex-start; background: var(--green-dim); border-radius: 8px; padding: 2.5rem; border: 1px solid var(--green-border); }
-  .guarantee-badge { font-size: 2.5rem; flex-shrink: 0; }
-  .guarantee-content h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 0.8rem; letter-spacing: -0.02em; }
-  .guarantee-content p { font-size: 0.9rem; color: var(--text2); line-height: 1.75; margin-bottom: 1.2rem; }
-  .guarantee-content strong { color: var(--text); font-weight: 600; }
-  .guarantee-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  .gpill { font-size: 0.75rem; font-weight: 600; font-family: 'Space Grotesk', sans-serif; color: var(--green-light); background: var(--bg2); border: 1px solid var(--green-border); padding: 0.35rem 0.8rem; border-radius: 20px; }
-  @media (max-width: 900px) { .guarantee { padding: 3rem 1.5rem; } .guarantee-inner { flex-direction: column; gap: 1.5rem; padding: 1.5rem; } }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--green-dim); border: 1px solid var(--green-border);
+  color: var(--green); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.4rem 1rem; border-radius: 100px;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
 
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  .hero-tag { animation: fadeUp 0.5s ease both; }
-  h1 { animation: fadeUp 0.5s 0.1s ease both; }
-  .hero-sub { animation: fadeUp 0.5s 0.2s ease both; }
-  .hero-actions { animation: fadeUp 0.5s 0.3s ease both; }
-  .hero-cards { animation: fadeUp 0.6s 0.4s ease both; }
-  @media (max-width: 900px) {
-    nav { padding: 1rem 1.5rem; } .nav-links { display: none; }
-    .hero { padding: 7rem 1.5rem 3rem; }
-    .hero-cards { grid-template-columns: 1fr; }
-    section { padding: 4rem 1.5rem; }
-    .stats-strip { padding: 2rem 1.5rem; grid-template-columns: repeat(3,1fr); gap: 0.5rem; }
-    .stat-num { font-size: 1.8rem; }
-    .how-steps { grid-template-columns: 1fr; }
-    .why-inner { grid-template-columns: 1fr; gap: 3rem; }
-    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
-  }
+h1 {
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin-bottom: 1.8rem;
+  animation: fadeUp 0.7s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+}
+h1 .accent { color: var(--green); }
+h1 .lined {
+  position: relative; display: inline-block;
+  background: linear-gradient(135deg, var(--text) 0%, rgba(238,242,247,0.7) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.1rem; font-weight: 300; line-height: 1.75;
+  color: var(--text2); max-width: 560px; margin-bottom: 3rem;
+  animation: fadeUp 0.7s 0.2s cubic-bezier(0.16,1,0.3,1) both;
+}
+.hero-sub strong { font-weight: 600; color: var(--text); }
+
+.hero-actions {
+  display: flex; gap: 1rem; align-items: center;
+  animation: fadeUp 0.7s 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.btn-primary {
+  background: var(--green); color: #000;
+  padding: 0.9rem 2rem; font-size: 0.9rem; font-weight: 700;
+  font-family: 'Outfit', sans-serif; letter-spacing: -0.01em;
+  border: none; border-radius: 8px; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 0 0 0 var(--glow);
+}
+.btn-primary:hover {
+  background: #16C955; transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--glow);
+}
+.btn-primary svg { transition: transform 0.2s; }
+.btn-primary:hover svg { transform: translateX(3px); }
+
+.btn-ghost {
+  color: var(--text2); font-size: 0.9rem; font-weight: 500;
+  text-decoration: none; display: flex; align-items: center; gap: 0.4rem;
+  transition: color 0.2s; padding: 0.9rem 1.2rem;
+  border: 1px solid var(--border2); border-radius: 8px;
+}
+.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.btn-ghost-arrow { transition: transform 0.2s; }
+.btn-ghost:hover .btn-ghost-arrow { transform: translateX(3px); }
+
+/* CARDS ROW */
+.hero-cards {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  margin-top: 5rem;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  animation: fadeUp 0.8s 0.4s cubic-bezier(0.16,1,0.3,1) both;
+}
+.proj-card {
+  background: var(--bg2); padding: 1.8rem;
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+}
+.proj-card:hover { background: var(--surface); }
+.proj-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--green); opacity: 0;
+  transition: opacity 0.3s;
+}
+.proj-card:hover::before { opacity: 1; }
+.proj-label {
+  font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--green); font-weight: 600; margin-bottom: 0.6rem;
+  font-family: 'DM Mono', monospace;
+}
+.proj-title {
+  font-weight: 700; font-size: 1rem; color: var(--text);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.proj-desc { font-size: 0.82rem; color: var(--text2); line-height: 1.65; margin-bottom: 1rem; }
+.proj-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.proj-tag {
+  font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.2rem 0.55rem; border-radius: 4px;
+  background: var(--green-dim); color: var(--green);
+  font-family: 'DM Mono', monospace; font-weight: 500;
+}
+.proj-demo {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.75rem; font-weight: 600; color: var(--green);
+  text-decoration: none; border: 1px solid var(--green-border);
+  padding: 0.3rem 0.8rem; border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.proj-demo:hover { background: var(--green); color: #000; }
+.proj-demo-request {
+  font-size: 0.72rem; color: var(--text3);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.02em;
+}
+
+/* STATS */
+.stats-strip {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat-item {
+  padding: 2.5rem 5rem; text-align: center;
+  border-right: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+}
+.stat-item:last-child { border-right: none; }
+.stat-item:hover { background: var(--bg2); }
+.stat-item::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, var(--glow) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.stat-item:hover::after { opacity: 1; }
+.stat-num {
+  font-size: 2.8rem; font-weight: 800; color: var(--green);
+  line-height: 1; letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.stat-desc { font-size: 0.82rem; color: var(--text3); margin-top: 0.5rem; letter-spacing: 0.01em; }
+
+/* SECTION BASE */
+section { padding: 7rem 5rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-label {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--green); margin-bottom: 1.2rem;
+  font-family: 'DM Mono', monospace;
+}
+.section-label::before {
+  content: ''; width: 24px; height: 1px; background: var(--green);
+}
+
+h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800;
+  letter-spacing: -0.035em; line-height: 1.08; color: var(--text);
+  margin-bottom: 1rem;
+}
+.section-sub {
+  font-size: 1rem; color: var(--text2); line-height: 1.75;
+  font-weight: 300; max-width: 520px; margin-top: 0.8rem;
+}
+
+/* HOW */
+.how { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 4rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.step {
+  padding: 2rem 1.8rem; position: relative;
+  border-right: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.step:last-child { border-right: none; }
+.step:hover { background: var(--bg3); }
+.step-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; color: var(--green); font-weight: 500;
+  letter-spacing: 0.1em; margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.step-num::before {
+  content: ''; width: 16px; height: 1px; background: var(--green);
+}
+.step-title { font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 0.6rem; letter-spacing: -0.01em; }
+.step-desc { font-size: 0.83rem; color: var(--text2); line-height: 1.7; font-weight: 300; }
+
+/* WHY */
+.why { background: var(--bg); }
+.why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; margin-top: 1rem; }
+.why-points { display: flex; flex-direction: column; gap: 0; margin-top: 2rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.why-point {
+  display: flex; gap: 1.2rem; align-items: flex-start;
+  padding: 1.6rem; border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.why-point:last-child { border-bottom: none; }
+.why-point:hover { background: var(--bg2); }
+.why-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--green-dim); border: 1px solid var(--green-border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: var(--green);
+}
+.why-icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.75; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.why-point-text h4 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; letter-spacing: -0.01em; }
+.why-point-text p { font-size: 0.82rem; color: var(--text2); line-height: 1.7; font-weight: 300; }
+
+.founder-block {
+  margin-top: 2rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.8rem; position: relative; overflow: hidden;
+}
+.founder-block::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--green), transparent);
+}
+.founder-label {
+  font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--green); font-weight: 600; margin-bottom: 1rem;
+  font-family: 'DM Mono', monospace;
+}
+.founder-quote { font-size: 0.92rem; color: var(--text2); line-height: 1.8; font-style: italic; }
+.founder-name { margin-top: 1.2rem; font-weight: 600; font-size: 0.85rem; color: var(--text); }
+.founder-role { font-size: 0.75rem; color: var(--text3); margin-top: 0.2rem; }
+
+/* REVIEWS */
+.reviews { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 3.5rem; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.review-card {
+  background: var(--bg2); padding: 2rem;
+  position: relative; transition: background 0.3s;
+}
+.review-card:hover { background: var(--surface); }
+.review-stars { color: #F59E0B; font-size: 0.8rem; margin-bottom: 1.2rem; letter-spacing: 0.08em; }
+.review-text { font-size: 0.875rem; color: var(--text2); line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; font-weight: 300; }
+.review-divider { height: 1px; background: var(--border); margin-bottom: 1rem; }
+.review-app { font-size: 0.72rem; color: var(--green); margin-top: 0; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'DM Mono', monospace; font-weight: 500; }
+
+/* GUARANTEE */
+.guarantee { background: var(--bg); }
+.guarantee-inner {
+  max-width: 900px; margin: 0 auto;
+  background: var(--green-dim); border: 1px solid var(--green-border);
+  border-radius: 16px; padding: 3rem;
+  display: flex; gap: 2.5rem; align-items: flex-start;
+  position: relative; overflow: hidden;
+}
+.guarantee-inner::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--green), transparent);
+}
+.guarantee-badge { width: 56px; height: 56px; flex-shrink: 0; border-radius: 10px; background: var(--bg3); border: 1px solid var(--green-border); display: flex; align-items: center; justify-content: center; color: var(--green); }
+.guarantee-badge svg { width: 28px; height: 28px; stroke: currentColor; stroke-width: 1.75; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.guarantee-content h3 { font-size: 1.25rem; font-weight: 800; color: var(--text); margin-bottom: 0.8rem; letter-spacing: -0.02em; }
+.guarantee-content p { font-size: 0.875rem; color: var(--text2); line-height: 1.75; margin-bottom: 1.5rem; font-weight: 300; }
+.guarantee-content strong { color: var(--text); font-weight: 600; }
+.guarantee-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.gpill {
+  font-size: 0.72rem; font-weight: 600; color: var(--green);
+  background: rgba(34,197,94,0.1); border: 1px solid var(--green-border);
+  padding: 0.35rem 0.8rem; border-radius: 100px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* CTA */
+.cta-section { background: var(--bg2); border-top: 1px solid var(--border); text-align: center; }
+.cta-section h2 { margin-bottom: 1rem; }
+.cta-section p { color: var(--text2); font-size: 0.95rem; max-width: 460px; margin: 0 auto 2.5rem; line-height: 1.75; font-weight: 300; }
+.btn-white {
+  background: var(--text); color: var(--bg);
+  padding: 0.95rem 2.4rem; font-size: 0.9rem; font-weight: 700;
+  border: none; border-radius: 8px; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+  transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+  font-family: 'Outfit', sans-serif; letter-spacing: -0.01em;
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(238,242,247,0.15); background: white; }
+.cta-note { display: block; margin-top: 1.2rem; color: var(--text3); font-size: 0.78rem; font-family: 'DM Mono', monospace; }
+
+/* CONTACT */
+.contact-section { background: var(--bg); border-top: 1px solid var(--border); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
+.contact-left h2 { color: var(--text); }
+.contact-sub { color: var(--text2); font-size: 0.95rem; line-height: 1.8; margin-top: 1rem; margin-bottom: 2rem; font-weight: 300; }
+.contact-promises { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+.cp { font-size: 0.85rem; font-weight: 500; color: var(--text2); display: flex; align-items: center; gap: 0.6rem; }
+.cp-icon { color: var(--green); font-weight: 700; }
+
+.loom-btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--green-dim); border: 1px solid var(--green-border);
+  color: var(--green); font-family: 'Outfit', sans-serif;
+  font-weight: 600; font-size: 0.85rem;
+  padding: 0.8rem 1.4rem; border-radius: 8px; text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.loom-btn:hover { background: rgba(34,197,94,0.15); box-shadow: 0 0 20px var(--glow); }
+.loom-note { color: var(--text3); font-size: 0.72rem; margin-top: 0.7rem; font-family: 'DM Mono', monospace; }
+
+.contact-form-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2.5rem;
+}
+.contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.form-group label {
+  font-size: 0.72rem; font-weight: 600; color: var(--text3);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+.form-group input, .form-group select, .form-group textarea {
+  font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text);
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 0.8rem 1rem; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; width: 100%; resize: vertical;
+}
+.form-group input::placeholder, .form-group textarea::placeholder { color: var(--text3); }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px var(--green-dim);
+}
+.form-group select { cursor: pointer; }
+.form-group select option { background: var(--bg2); }
+.form-submit {
+  background: var(--green); color: #000;
+  font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 700;
+  padding: 0.95rem 2rem; border: none; border-radius: 8px; cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  letter-spacing: -0.01em;
+}
+.form-submit:hover { background: #16C955; transform: translateY(-1px); box-shadow: 0 8px 24px var(--glow); }
+
+/* FOOTER */
+footer {
+  background: var(--bg2); padding: 2rem 5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.footer-logo { font-weight: 700; font-size: 0.95rem; color: var(--text); letter-spacing: -0.01em; }
+.footer-logo-dot { color: var(--green); }
+.footer-copy { font-size: 0.72rem; color: var(--text3); font-family: 'DM Mono', monospace; }
+.footer-email { font-size: 0.8rem; color: var(--green); text-decoration: none; font-family: 'DM Mono', monospace; transition: color 0.2s; }
+.footer-email:hover { color: #16C955; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 7rem 1.5rem 4rem; }
+  .hero-cards { grid-template-columns: 1fr; }
+  section { padding: 5rem 1.5rem; }
+  .stats-strip { grid-template-columns: repeat(3,1fr); }
+  .stat-item { padding: 2rem 1rem; }
+  .stat-num { font-size: 2rem; }
+  .how-steps { grid-template-columns: 1fr; }
+  .step { border-right: none; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .why-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .guarantee-inner { flex-direction: column; gap: 1.5rem; padding: 2rem; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+  h1 { font-size: 2.8rem; }
+}
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#">Beachdog Solutions</a>
+  <a class="nav-logo" href="#">Beachdog Solutions<span class="nav-logo-dot">.</span></a>
   <ul class="nav-links">
     <li><a href="#work">Work</a></li>
-    <li><a href="#how">Process</a></li>
+    <li><a href="#process">Process</a></li>
     <li><a href="#why">Why Us</a></li>
     <li><a href="#contact-form" class="nav-cta">Get a Quote</a></li>
   </ul>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-glow"></div>
   <div class="hero-grid"></div>
-  <div class="hero-top">
-    <div class="hero-tag">Custom Apps for Real Businesses</div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Custom Apps Built Around You
+    </div>
     <h1>Your workflows,<br><span class="accent">automated.</span><br><span class="lined">Done fast</span></h1>
     <p class="hero-sub">We build <strong>fully custom apps</strong> around the way your business actually works — not the other way around. We adopt your workflows, eliminate the manual work, and deliver fast. So you can get back to spending time like a beachdog.</p>
     <div class="hero-actions">
-      <a href="#contact-form" class="btn-primary">Start the Conversation</a>
-      <a href="#work" class="btn-ghost">See our work</a>
+      <a href="#contact-form" class="btn-primary">
+        Start the Conversation
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#work" class="btn-ghost">
+        See our work <span class="btn-ghost-arrow">→</span>
+      </a>
     </div>
   </div>
+
+  <!-- PROJECT CARDS -->
   <div class="hero-cards" id="work">
-    <div class="hero-proj-card p1">
+    <div class="proj-card">
       <div class="proj-label">Swiss Brand · In Progress</div>
       <div class="proj-title">Repair Job Tracker</div>
       <div class="proj-desc">End-to-end repair management — intake, status updates, technician assignment, and customer communication in one system.</div>
       <div class="proj-tags"><span class="proj-tag">Job Tracking</span><span class="proj-tag">Operations</span><span class="proj-tag">Status Updates</span></div>
       <a href="repair_demo.html" class="proj-demo" target="_blank">View Demo →</a>
     </div>
-    <div class="hero-proj-card p2">
+    <div class="proj-card">
       <div class="proj-label">F&B Business</div>
       <div class="proj-title">Point of Sale System</div>
       <div class="proj-desc">Full POS replacing paper orders and a cash drawer. Orders, tables, and daily revenue reporting in one clean screen.</div>
       <div class="proj-tags"><span class="proj-tag">POS</span><span class="proj-tag">Revenue Tracking</span><span class="proj-tag">Table Management</span></div>
-      <span style="font-size:0.7rem;color:var(--text3);font-family:'Space Grotesk',sans-serif;">Demo available on request</span>
+      <span class="proj-demo-request">Demo available on request</span>
     </div>
-    <div class="hero-proj-card p3">
+    <div class="proj-card">
       <div class="proj-label">F&B Business</div>
       <div class="proj-title">Recipe & Cost Manager</div>
       <div class="proj-desc">Internal app to manage recipes, calculate ingredient costs, and keep the kitchen aligned with their actual workflow.</div>
       <div class="proj-tags"><span class="proj-tag">Recipe Management</span><span class="proj-tag">Cost Control</span><span class="proj-tag">Kitchen Ops</span></div>
-      <span style="font-size:0.7rem;color:var(--text3);font-family:'Space Grotesk',sans-serif;">Demo available on request</span>
+      <span class="proj-demo-request">Demo available on request</span>
     </div>
   </div>
 </section>
 
+<!-- STATS -->
 <div class="stats-strip">
-  <div><div class="stat-num">2 weeks</div><div class="stat-desc">Average delivery time</div></div>
-  <div><div class="stat-num">3×</div><div class="stat-desc">Cheaper than hiring a dev agency</div></div>
-  <div><div class="stat-num">100%</div><div class="stat-desc">Custom — built around your workflow</div></div>
+  <div class="stat-item reveal">
+    <div class="stat-num">2 weeks</div>
+    <div class="stat-desc">Average delivery time</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-1">
+    <div class="stat-num">3×</div>
+    <div class="stat-desc">Cheaper than hiring a dev agency</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-2">
+    <div class="stat-num">100%</div>
+    <div class="stat-desc">Custom — built around your workflow</div>
+  </div>
 </div>
 
-<section class="how" id="how">
-  <div class="how-inner">
-    <div class="how-header">
-      <div class="section-tag">How it works</div>
-      <h2>Simple process<br>Real results</h2>
-      <p>No lengthy discovery phases. No confusing specs. We talk, we understand your operation, we build.</p>
+<!-- HOW IT WORKS -->
+<section class="how" id="process">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">How it works</div>
+      <h2>Simple process.<br>Real results</h2>
+      <p class="section-sub">No lengthy discovery phases. No confusing specs. We talk, we understand your operation, we build.</p>
     </div>
     <div class="how-steps">
-      <div class="step"><div class="step-num">01</div><div class="step-title">Tell us your pain</div><div class="step-desc">One message is enough. Describe what's slowing you down — spreadsheets, manual tracking, lost data. We listen and ask the right questions.</div><div class="step-arrow">→</div></div>
-      <div class="step"><div class="step-num">02</div><div class="step-title">We scope and quote</div><div class="step-desc">Within 48 hours you get a clear breakdown — what we'll build, how long it takes, what it costs. No surprises, no fluff.</div><div class="step-arrow">→</div></div>
-      <div class="step"><div class="step-num">03</div><div class="step-title">We build it fast</div><div class="step-desc">You get a working first version quickly. Then we test it together, gather your feedback, and fine-tune until it fits your workflow perfectly.</div><div class="step-arrow">→</div></div>
-      <div class="step"><div class="step-num">04</div><div class="step-title">You get your time back</div><div class="step-desc">Once it's refined and running smoothly, the manual work disappears. Your team uses a tool built exactly for how they work — nothing more, nothing less.</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="why" id="why">
-  <div class="why-inner">
-    <div>
-      <div class="section-tag">Why Beachdog</div>
-      <h2>Built by people who've run the operations.</h2>
-      <p class="why-sub">Most developers build a generic solution and ask you to adapt. We do the opposite — we study how your business runs, adopt your workflows, and build something that fits like it was always there. Because it was built for you.</p>
-      <p class="why-sub" style="margin-top:1rem;">Between us, we bring operations and engineering — retail, e-commerce, customer service, hospitality, and the technical side of building software that actually holds up. Industries where the margin for error is zero. That combination shapes every app we build. And while we know these worlds deeply, we're not limited to them. If you run a dive shop, a repair service, or something we've never seen before — bring it. The process is the same: understand the problem first, build second.</p>
-      <div class="founder-block">
-        <div class="founder-label">From the team</div>
-        <div class="founder-quote">"Between us, we've spent years on both sides of the problem — running operations and building the tools to fix them. We kept hitting the same wall: the software didn't fit the way real businesses work. So we built our own. Now we build yours."</div>
-        <div class="founder-name">— The Beachdog Team</div>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">01</div>
+        <div class="step-title">Tell us your pain</div>
+        <div class="step-desc">One message is enough. Describe what's slowing you down — spreadsheets, manual tracking, lost data. We listen and ask the right questions.</div>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">02</div>
+        <div class="step-title">We scope and quote</div>
+        <div class="step-desc">Within 48 hours you get a clear breakdown — what we'll build, how long it takes, what it costs. No surprises, no fluff.</div>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">03</div>
+        <div class="step-title">We build it fast</div>
+        <div class="step-desc">You get a working first version quickly. Then we test it together, gather your feedback, and fine-tune until it fits your workflow perfectly.</div>
+      </div>
+      <div class="step reveal reveal-delay-4">
+        <div class="step-num">04</div>
+        <div class="step-title">You get your time back</div>
+        <div class="step-desc">Once refined and running smoothly, the manual work disappears. Your team uses a tool built exactly for how they work — nothing more, nothing less.</div>
       </div>
     </div>
-    <div class="why-points">
-      <div class="why-point"><div class="why-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-light)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="why-point-text"><h4>Operations-first thinking</h4><p>10+ years running and managing business operations between us. We know where the bottlenecks live before you finish describing them.</p></div></div>
-      <div class="why-point"><div class="why-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-light)"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="why-point-text"><h4>Speed that makes sense</h4><p>Apps in days or weeks. Not a 6-month project with a 3-month delay and a spec document nobody reads.</p></div></div>
-      <div class="why-point"><div class="why-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-light)"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="why-point-text"><h4>Price that doesn't hurt</h4><p>Roughly a third of what a traditional agency charges. No account managers, no overhead — just the work.</p></div></div>
-      <div class="why-point"><div class="why-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-light)"><polyline points="20 6 9 17 4 12"/></svg></div><div class="why-point-text"><h4>Fit that actually works</h4><p>Every app solves a real operational problem. Not a technical spec — the actual thing that's costing you time and money.</p></div></div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why" id="why">
+  <div class="section-inner">
+    <div class="why-grid">
+      <div class="reveal">
+        <div class="section-label">Why Beachdog</div>
+        <h2>Built by someone who ran the operations first</h2>
+        <p class="section-sub">Most developers build a generic solution and ask you to adapt. We do the opposite — we study how your business runs, adopt your workflows, and build something that fits like it was always there. Because it was built for you.</p>
+        <p class="section-sub" style="margin-top:1rem;">Our background spans retail, e-commerce, customer service and hospitality — industries where operations are everything and the margin for error is zero. That experience shapes every app we build. And while we know these worlds deeply, we're not limited to them. If you run a dive shop, a repair service, or something we've never seen before — bring it. The process is the same: understand the problem first, build second.</p>
+        <div class="founder-block">
+          <div class="founder-label">From the founder</div>
+          <div class="founder-quote">"We spent over 20 years in business operations and management before writing a single line of code. We taught ourselves to build because we kept running into the same problem: the tools didn't fit the way real businesses actually work. So we built them ourselves. Now we build them for you."</div>
+          <div class="founder-name">— Founder, Beachdog Solutions</div>
+        </div>
+      </div>
+      <div class="why-points reveal reveal-delay-1">
+        <div class="why-point">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></div>
+          <div class="why-point-text">
+            <h4>Operations-first thinking</h4>
+            <p>20+ years running and managing business operations. We know where the bottlenecks live before you finish describing them.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg></div>
+          <div class="why-point-text">
+            <h4>Speed that makes sense</h4>
+            <p>Apps in days or weeks. Not a 6-month project with a 3-month delay and a spec document nobody reads.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+          <div class="why-point-text">
+            <h4>Price that doesn't hurt</h4>
+            <p>Roughly a third of what a traditional agency charges. No account managers, no overhead — just the work.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M19 11h-1V7a1 1 0 0 0-1-1h-4V5a2.5 2.5 0 0 0-5 0v1H4a1 1 0 0 0-1 1v4h1a2.5 2.5 0 0 1 0 5H3v4a1 1 0 0 0 1 1h4v-1a2.5 2.5 0 0 1 5 0v1h4a1 1 0 0 0 1-1v-4h1a2.5 2.5 0 0 0 0-5z"/></svg></div>
+          <div class="why-point-text">
+            <h4>Fit that actually works</h4>
+            <p>Every app solves a real operational problem. Not a technical spec — the actual thing that's costing you time and money.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- REVIEWS -->
 <section class="reviews">
-  <div class="reviews-inner">
-    <div class="reviews-header">
-      <div class="section-tag">Client feedback</div>
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Client feedback</div>
       <h2>What our clients say</h2>
     </div>
     <div class="reviews-grid">
-
-      <div class="review-card">
-        <div class="review-quote">"</div>
+      <div class="review-card reveal reveal-delay-1">
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">"This is saving me hours and hours of work every month. The accounting tab, the staff management, and the built-in transaction tracker have completely changed how I run my business."</p>
-        <div class="review-author">
-          <div class="review-name">Restaurant Owner</div>
-          <div class="review-role">Bali, Indonesia</div>
-          <div class="review-app">Point of Sale System</div>
-        </div>
+        <p class="review-text">"This is saving us hours and hours of work every month. The accounting tab, the staff management, and the built-in transaction tracker have completely changed how we run our business."</p>
+        <div class="review-divider"></div>
+        <div class="review-app">Point of Sale System</div>
       </div>
-
-      <div class="review-card">
-        <div class="review-quote">"</div>
+      <div class="review-card reveal reveal-delay-2">
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">"Having all my recipes, ingredients and costs in one place has made a real difference. I can see exactly what each dish costs, keep everything up to date, and share it with my kitchen team instantly."</p>
-        <div class="review-author">
-          <div class="review-name">Restaurant Owner</div>
-          <div class="review-role">Hong Kong</div>
-          <div class="review-app">Recipe & Cost Manager</div>
-        </div>
+        <p class="review-text">"Having all our recipes, ingredients and costs in one place has made a real difference. We can see exactly what each dish costs, keep everything up to date, and share it with the kitchen team instantly."</p>
+        <div class="review-divider"></div>
+        <div class="review-app">Recipe & Cost Manager</div>
       </div>
-
-      <div class="review-card">
-        <div class="review-quote">"</div>
+      <div class="review-card reveal reveal-delay-3">
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">"The repair tracker has made our day-to-day operations so much easier. Before this, jobs were constantly getting lost or sent to the wrong workshop. Now everything is in one place — I get alerts when a repair is taking too long, and I can see all costs and invoices at a glance. The best part is that we can manage it ourselves and update the settings whenever we need to."</p>
-        <div class="review-author">
-          <div class="review-name">Operations Manager</div>
-          <div class="review-role">Germany</div>
-          <div class="review-app">Repair Job Tracker</div>
-        </div>
+        <p class="review-text">"The repair tracker has made our day-to-day operations so much easier. Before this, jobs were constantly getting lost or sent to the wrong workshop. Now everything is in one place — we get alerts when a repair is taking too long, and we can see all costs and invoices at a glance. The best part is that we can manage it ourselves and update the settings whenever we need to."</p>
+        <div class="review-divider"></div>
+        <div class="review-app">Repair Job Tracker</div>
       </div>
-
     </div>
   </div>
 </section>
 
+<!-- GUARANTEE -->
 <section class="guarantee">
-  <div class="guarantee-inner">
-    <div class="guarantee-badge"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-light)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-    <div class="guarantee-content">
-      <h3>2-Week Satisfaction Guarantee</h3>
-      <p>Every app we build is scoped together with you upfront — no surprises. If what we deliver doesn't match what we agreed, we fix it immediately. If we can't get it right, <strong>you get your money back.</strong> No awkward conversations. No fine print.</p>
-      <div class="guarantee-pills">
-        <span class="gpill">✓ Built to your exact workflow</span>
-        <span class="gpill">✓ Fix or refund within 2 weeks</span>
-        <span class="gpill">✓ Transparent scope upfront</span>
+  <div class="section-inner">
+    <div class="guarantee-inner reveal">
+      <div class="guarantee-badge"><svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div class="guarantee-content">
+        <h3>2-Week Satisfaction Guarantee</h3>
+        <p>Every app we build is scoped together with you upfront — no surprises. If what we deliver doesn't match what we agreed, we fix it immediately. If we can't get it right, <strong>you get your money back.</strong> No awkward conversations. No fine print.</p>
+        <div class="guarantee-pills">
+          <span class="gpill">✓ Built to your exact workflow</span>
+          <span class="gpill">✓ Fix or refund within 2 weeks</span>
+          <span class="gpill">✓ Transparent scope upfront</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-
+<!-- CTA -->
 <section class="cta-section">
-  <h2>Tired of doing it manually?</h2>
-  <p>Tell us what's slowing your business down. We'll tell you if we can fix it — and how fast.</p>
-  <a href="#contact-form" class="btn-white">Get in Touch →</a>
-  <span class="cta-note">Free consultation · Quote within 48 hours · 2-week guarantee</span>
+  <div class="section-inner reveal">
+    <h2>Tired of doing it manually?</h2>
+    <p>Tell us what's slowing your business down. We'll tell you if we can fix it — and how fast.</p>
+    <a href="#contact-form" class="btn-white">
+      Get in Touch
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <span class="cta-note">Free consultation · Quote within 48 hours · 2-week guarantee</span>
+  </div>
 </section>
 
+<!-- CONTACT -->
 <section class="contact-section" id="contact-form">
-  <div class="contact-inner">
-    <div class="contact-left">
-      <div class="section-tag" style="color:var(--sun);">Get in touch</div>
-      <h2 style="color:white;">Let's talk about your business</h2>
-      <p class="contact-sub">Tell us what's slowing you down. We'll tell you if we can fix it — and how fast. Usually back within 24 hours.</p>
-      <div class="contact-promises">
-        <div class="cp">✓ Free workflow review</div>
-        <div class="cp">✓ Quote within 48 hours</div>
-        <div class="cp">✓ 2-week satisfaction guarantee</div>
-      </div>
-      <div style="margin-top:2rem;">
-        <p style="color:rgba(245,239,224,0.5);font-size:0.82rem;margin-bottom:1rem;">Prefer to show us instead of describe it?</p>
-        <a href="https://cal.eu/beachdog-solutions/workflow-review" target="_blank" style="display:inline-flex;align-items:center;gap:0.6rem;background:var(--sun);color:var(--deep);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.85rem;padding:0.8rem 1.4rem;border-radius:3px;text-decoration:none;transition:opacity 0.2s;">
-          Record a Loom &amp; Submit →
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-left reveal">
+        <div class="section-label">Get in touch</div>
+        <h2>Let's talk about your business</h2>
+        <p class="contact-sub">Tell us what's slowing you down. We'll tell you if we can fix it — and how fast. Usually back within 24 hours.</p>
+        <div class="contact-promises">
+          <div class="cp"><span class="cp-icon">✓</span> Free workflow review</div>
+          <div class="cp"><span class="cp-icon">✓</span> Quote within 48 hours</div>
+          <div class="cp"><span class="cp-icon">✓</span> 2-week satisfaction guarantee</div>
+        </div>
+        <p style="color:var(--text3);font-size:0.82rem;margin-bottom:0.8rem;font-family:'DM Mono',monospace;">Prefer to talk it through?</p>
+        <a href="https://cal.eu/beachdog-solutions/workflow-review" target="_blank" class="loom-btn">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg> Book a 15-min workflow review →
         </a>
-        <p style="color:rgba(245,239,224,0.35);font-size:0.75rem;margin-top:0.7rem;">Record a 2-min screen walkthrough at loom.com — no video call needed</p>
+        <p class="loom-note">A quick call to walk us through your workflow — no prep needed</p>
       </div>
-    </div>
-    <div class="contact-right">
-      <form action="https://formspree.io/f/mbdpknvd" method="POST" class="contact-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">Your name</label>
-            <input type="text" id="name" name="name" placeholder="Your name" required>
+      <div class="contact-form-wrap reveal reveal-delay-1">
+        <form action="https://formspree.io/f/mbdpknvd" method="POST" class="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" placeholder="you@company.com" required>
+            </div>
           </div>
           <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" id="email" name="email" placeholder="you@company.com" required>
+            <label for="company">Company name</label>
+            <input type="text" id="company" name="company" placeholder="Your business name">
           </div>
-        </div>
-        <div class="form-group">
-          <label for="company">Company name</label>
-          <input type="text" id="company" name="company" placeholder="Your business name">
-        </div>
-        <div class="form-group">
-          <label for="need">What do you need?</label>
-          <select id="need" name="need" required>
-            <option value="" disabled selected>Select what fits best</option>
-            <option value="Custom app from scratch">Custom app from scratch</option>
-            <option value="Automate a manual process">Automate a manual process</option>
-            <option value="Replace spreadsheets">Replace spreadsheets</option>
-            <option value="POS or inventory system">POS or inventory system</option>
-            <option value="Something else">Something else</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="message">Tell us more</label>
-          <textarea id="message" name="message" rows="4" placeholder="Describe the problem you're trying to solve — the more detail the better." required></textarea>
-        </div>
-        <button type="submit" class="form-submit">Send Message →</button>
-      </form>
+          <div class="form-group">
+            <label for="need">What do you need?</label>
+            <select id="need" name="need" required>
+              <option value="" disabled selected>Select what fits best</option>
+              <option value="Custom app from scratch">Custom app from scratch</option>
+              <option value="Automate a manual process">Automate a manual process</option>
+              <option value="Replace spreadsheets">Replace spreadsheets</option>
+              <option value="POS or inventory system">POS or inventory system</option>
+              <option value="Something else">Something else</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Tell us more</label>
+            <textarea id="message" name="message" rows="4" placeholder="Describe the problem you're trying to solve — the more detail the better." required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message →</button>
+        </form>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">Beachdog Solutions</div>
+  <div class="footer-logo">Beachdog Solutions<span class="footer-logo-dot">.</span></div>
   <div class="footer-copy">© 2026 Beachdog Solutions. Hong Kong.</div>
-  <a href="/cdn-cgi/l/email-protection#a6cfc8c0c9e6c4c3c7c5cec2c9c1d5c9cad3d2cfc9c8d588c5c9cb
+  <a href="mailto:info@beachdogsolutions.com" class="footer-email">info@beachdogsolutions.com</a>
+</footer>
+
+<!-- SCROLL REVEAL -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
